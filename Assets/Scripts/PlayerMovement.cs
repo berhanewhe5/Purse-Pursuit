@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     //There are 3 rows this value can only be 1,2 or 3.
     public int playerRow;
+    public float[] carRowPosition;
 
     private bool horizontalMovedApplied;
 
@@ -31,6 +32,12 @@ public class PlayerMovement : MonoBehaviour
 
     public bool swipeTimeout = false;
     public float timeoutTime;
+    public bool setPoliceCarPosition = false;
+
+    public GameObject StopPoliceCarTrigger;
+    public CarSpawner carSpawner;
+
+    public GameManagerScript gameManager;
     void Start()
     {
         handCuffs.SetActive(false);
@@ -38,11 +45,12 @@ public class PlayerMovement : MonoBehaviour
         horizontalMovedApplied = true;
     }
 
-    public IEnumerator SwipeTimeout() { 
+    public IEnumerator SwipeTimeout() {
         swipeTimeout = true;
         yield return new WaitForSeconds(timeoutTime);
         swipeTimeout = false;
     }
+
     //rb.velocity = Vector3.right * horizontalSpeed;
     void Update()
     {
@@ -68,6 +76,10 @@ public class PlayerMovement : MonoBehaviour
                             playerVelocity += Vector3.left * horizontalSpeed;
                             horizontalMovedApplied = false;
                             playerRow -= 1;
+                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                            {
+                                gameManager.GetComponent<Tutorial>().TutorialPart3();
+                            }
                         }
                     }
                     else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -77,6 +89,10 @@ public class PlayerMovement : MonoBehaviour
                             playerVelocity += Vector3.right * horizontalSpeed;
                             horizontalMovedApplied = false;
                             playerRow += 1;
+                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                            {
+                                gameManager.GetComponent<Tutorial>().TutorialPart2();
+                            }
                         }
                     }
 #endif
@@ -98,6 +114,51 @@ public class PlayerMovement : MonoBehaviour
                                     playerVelocity += Vector3.right * horizontalSpeed;
                                     horizontalMovedApplied = false;
                                     playerRow += 1;
+                                    if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                                    {
+                                        gameManager.GetComponent<Tutorial>().TutorialPart2();
+                                    }
+                                }
+                                else if (startTouchPosition.x > endTouchPosition.x)
+                                {
+                                    if (playerRow != 1)
+                                    {
+                                        playerVelocity += Vector3.left * horizontalSpeed;
+                                        horizontalMovedApplied = false;
+                                        playerRow -= 1;
+                                        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                                        {
+                                            gameManager.GetComponent<Tutorial>().TutorialPart3();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+#endif
+
+#if UNITY_ANDROID
+                    if (Input.touchCount > 0)
+                    {
+                        Touch touch = Input.GetTouch(0);
+                        if (touch.phase == UnityEngine.TouchPhase.Began)
+                        {
+                            startTouchPosition = touch.position;
+                        }
+                        if (touch.phase == UnityEngine.TouchPhase.Ended)
+                        {
+                            endTouchPosition = touch.position;
+                            if (startTouchPosition.x < endTouchPosition.x)
+                            {
+                                if (playerRow != 5)
+                                {
+                                    playerVelocity += Vector3.right * horizontalSpeed;
+                                    horizontalMovedApplied = false;
+                                    playerRow += 1;
+                                    if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                                    {
+                                        gameManager.GetComponent<Tutorial>().TutorialPart2();
+                                    }
                                 }
                             }
                             else if (startTouchPosition.x > endTouchPosition.x)
@@ -107,6 +168,10 @@ public class PlayerMovement : MonoBehaviour
                                     playerVelocity += Vector3.left * horizontalSpeed;
                                     horizontalMovedApplied = false;
                                     playerRow -= 1;
+                                    if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                                    {
+                                        gameManager.GetComponent<Tutorial>().TutorialPart3();
+                                    }
                                 }
                             }
                         }
@@ -114,30 +179,39 @@ public class PlayerMovement : MonoBehaviour
 #endif
                 }
             }
+
             if (horizontalMovedApplied)
             {
                 playerController.Move(playerVelocity * Time.deltaTime);
             }
-            else{
+            else
+            {
                 playerController.Move(playerVelocity);
                 playerVelocity.x = 0;
                 horizontalMovedApplied = true;
             }
         }
-        else {
+        else
+        {
             if (notArrested)
             {
                 playerAnimator.SetTrigger("PlayerCaught");
                 stealScript.gameActive = false;
+                if (!setPoliceCarPosition)
+                {
+                    StopPoliceCarTrigger.transform.position = new Vector3(StopPoliceCarTrigger.transform.position.x, StopPoliceCarTrigger.transform.position.y, transform.position.z + carRowPosition[playerRow - 1]);
+                    carSpawner.isPlayerBusted = true;
+                    setPoliceCarPosition = true;
+                }
             }
-            else{
+            else
+            {
                 playerAnimator.SetTrigger("PlayerUnderArrest");
                 handCuffs.SetActive(true);
             }
-                
+
         }
     }
-
 
 
     public void callSpeedPowerUp(float speedMultiplier, float powerUpTime)
@@ -147,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
 
         StartCoroutine(speedPowerUp(s, t));
     }
+
     public IEnumerator speedPowerUp(float speedMultiplier, float powerUpTime)
     {
         fowardSpeed *= speedMultiplier;

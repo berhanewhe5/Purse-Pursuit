@@ -54,7 +54,11 @@ public class StealScript : MonoBehaviour
     public AudioSource playerWalkingAudioSource;
     public Animator increaseMoneyAlertAnimator;
     public TMP_Text increaseMoneyAlertText;
+    public GameManagerScript gameManager;
 
+    public int stealAttempts;
+    public bool canSteal;
+    bool firstStealCompleted = false;
     private void Start()
     {
         ChooseRandomGreenArea();
@@ -62,6 +66,8 @@ public class StealScript : MonoBehaviour
 
         Money = 0;
         moneyText.text = "$" + Money.ToString();
+
+        canSteal = (PlayerPrefs.GetInt("GamePlayedBefore") == 1);
     }
 
     void Update()
@@ -74,23 +80,40 @@ public class StealScript : MonoBehaviour
             {
                 inStealingZone = true;
 
-                if (!instantSteaalPowerUpActivated)
+                if (canSteal)
                 {
-
-                    stealSlider.SetActive(true);
-                    Time.timeScale = slowedDownTime;
-                    playerWalkingAudioSource.pitch = slowedDownTime;
-                    soundEffectsPlayer.sfxAudioSource.pitch = slowedDownTime;
-                    if (inStealingZone == true)
+                    if (!instantSteaalPowerUpActivated)
                     {
-                        stealSliderComponent.GetComponent<SliderController>().canSliderMove = true;
+                        stealSlider.SetActive(true);
+                        if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
+                        {
+                            Time.timeScale = slowedDownTime;
+                        }
+                        else {
+                            if (firstStealCompleted)
+                            {
+                                Time.timeScale = slowedDownTime;
+                            }
+                            else { 
+                                Time.timeScale = 0.01f;
+                                
+                            }
+                        }
+                        playerWalkingAudioSource.pitch = slowedDownTime;
+                        soundEffectsPlayer.VariablePitchSFXAudioSource.pitch = slowedDownTime;
+                        if (inStealingZone == true)
+                        {
+                            stealSliderComponent.GetComponent<SliderController>().canSliderMove = true;
+                        }
+                    }
+                    else
+                    {
+                        StealMoney();
+                        Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
+                        Destroy(civillian[0]);
                     }
                 }
-                else { 
-                    StealMoney();
-                    Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
-                    Destroy(civillian[0]);
-                }
+
             }
             else
             {
@@ -102,7 +125,7 @@ public class StealScript : MonoBehaviour
                 }
                 stealSlider.SetActive(false);
                 playerWalkingAudioSource.pitch = 1;
-                soundEffectsPlayer.sfxAudioSource.pitch = 1;
+                soundEffectsPlayer.VariablePitchSFXAudioSource.pitch = 1;
                 Time.timeScale = 1;
             }
         }
@@ -111,7 +134,7 @@ public class StealScript : MonoBehaviour
             {
                 Time.timeScale = 1;
                 playerWalkingAudioSource.pitch = 1;
-                soundEffectsPlayer.sfxAudioSource.pitch = 1;
+                soundEffectsPlayer.VariablePitchSFXAudioSource.pitch = 1;
             }
         }
     }
@@ -129,8 +152,6 @@ public class StealScript : MonoBehaviour
         /*
         float yPos = ;
         greenArea.anchoredPosition = new Vector2(greenArea.anchoredPosition.x, yPos);
-
- 
         */
 
         //Choose random green size
@@ -149,6 +170,16 @@ public class StealScript : MonoBehaviour
     }
     public void Steal()
     {
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            GetComponent<PlayerMovement>().gameManager.GetComponent<Tutorial>().TutorialPart4();
+            if (!firstStealCompleted)
+            {
+                gameManager.StartCoroutine("GenerateFirstGoal");
+            }
+            firstStealCompleted = true;
+            
+        }
 
         GetComponent<PlayerMovement>().StartCoroutine("SwipeTimeout");
         sliderController.canSliderMove = false;
@@ -181,6 +212,7 @@ public class StealScript : MonoBehaviour
         Destroy(civillian[0]);
         LoseMoney();
     }
+
     public void StealMoney()
     {
         int newMoney = UnityEngine.Random.Range(minToSteal, maxToSteal);
@@ -191,6 +223,14 @@ public class StealScript : MonoBehaviour
         {
             stealGoalScript.UpdateGoal(newMoney);
             soundEffectsPlayer.playStealMoneySFX();
+            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+            {
+                stealAttempts++;
+                if (stealAttempts == 3)
+                {
+                    GetComponent<PlayerMovement>().gameManager.GetComponent<Tutorial>().HideTutorialParts();
+                }
+            }
         }
         else {
             Money += (int)Math.Round((float)newMoney * multiplier);
@@ -198,7 +238,14 @@ public class StealScript : MonoBehaviour
             moneyText.text = "$" + Money.ToString();
             increaseMoneyAlertText.color = Color.green;
             PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + (int)Math.Round((float)newMoney * multiplier));
-            soundEffectsPlayer.playMultiplierStealMoneySFX();
+            if (multiplier > 1)
+            {
+                soundEffectsPlayer.playMultiplierStealMoneySFX();
+            }
+            else
+            {
+                soundEffectsPlayer.playStealMoneySFX();
+            }
         }
 
         if (minGreenAreaSize < (maxGreenAreaSize - greenAreaReduction))

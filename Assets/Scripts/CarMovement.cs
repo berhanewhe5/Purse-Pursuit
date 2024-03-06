@@ -8,6 +8,9 @@ public class CarMovement : MonoBehaviour
     public float speed;
     [SerializeField] float carLifeTime;
     public SoundEffectsPlayer soundEffectsPlayer;
+    public int row;
+    public GameObject StopPoliceCarTrigger;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -28,5 +31,9 @@ public class CarMovement : MonoBehaviour
             rb.AddForce(Vector3.forward * speed);
         }
 
+        if (row == 1 && transform.position.z < StopPoliceCarTrigger.transform.position.z)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

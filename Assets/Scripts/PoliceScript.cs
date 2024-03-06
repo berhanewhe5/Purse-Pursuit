@@ -15,12 +15,18 @@ public class PoliceScript : MonoBehaviour
     [SerializeField] private GameManagerScript gameManagerScript;
     public SoundEffectsPlayer soundEffectsPlayer;
     public AudioSource playerWalkingAudioSource;
+    public GameObject policeSirenVFX;
+    public GameObject gamePlayUI;
+
+
     void Awake()
     {
         policeController = GetComponent<CharacterController>(); 
         animator = GetComponent<Animator>();
         soundEffectsPlayer.playPoliceSirenSFX();
         playerWalkingAudioSource.volume = 0;
+        policeSirenVFX.SetActive(true);
+        gamePlayUI.SetActive(false);
     }
 
 

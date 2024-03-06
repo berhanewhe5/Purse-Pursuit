@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class GameManagerScript : MonoBehaviour
     public StealScript stealScript;
     public bool gamePaused;
     public GameObject police;
+    public GameObject policeCar;
     public GameObject player;
     public bool gameOver;
     public TMP_Text menuMoneyText;
@@ -32,7 +32,10 @@ public class GameManagerScript : MonoBehaviour
     public InterstitialAd interstitialAd;
 
     public GameObject adPanel;
-
+    public TMP_Text scoreText;
+    public TMP_Text highscoreText;
+    public AudioSource music;
+    public AudioMixer audioMixer;
     void Start()
     {
         mainMenuPanel.SetActive(true);
@@ -44,7 +47,7 @@ public class GameManagerScript : MonoBehaviour
         gameOver = false;
         menuMoneyText.text = "$"+PlayerPrefs.GetInt("Money").ToString();
         Time.timeScale = 1f;
-
+        audioMixer.SetFloat("GeneralSoundEffectsVolume", 0f);
         if (restarted)
         {
             Play();
@@ -53,6 +56,15 @@ public class GameManagerScript : MonoBehaviour
 
     public void Play()
     {
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            GetComponent<Tutorial>().StartTutorial();
+            GetComponent<Tutorial>().TutorialPart1();
+        }
+        else {
+            StartCoroutine("GenerateFirstGoal");
+        }
+
         gameOver = false;
 
         gameUIPanel.SetActive(true);
@@ -60,9 +72,19 @@ public class GameManagerScript : MonoBehaviour
         stealScript.gameActive = true;
         gamePaused = false;
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
-        GetComponent<StealGoalScript>().GenerateGoal();
+        
     }
 
+    IEnumerator GenerateFirstGoal()
+    {
+        yield return new WaitForSeconds(Random.Range(10f, 15f));
+        GetComponent<StealGoalScript>().GenerateGoal();
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            GetComponent<Tutorial>().TutorialPart5();
+        }
+
+    }
     public void MainMenuButton() { 
         restarted = false;
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
@@ -76,9 +98,14 @@ public class GameManagerScript : MonoBehaviour
     public void Lose()
     {
         stealScript.gameActive = false;
+        PlayerPrefs.GetInt("Highcore");
 
+        if (stealScript.Money > PlayerPrefs.GetInt("Highcore"))
+        {
+            PlayerPrefs.SetInt("Highcore", stealScript.Money);
+        }
 
-        if (PlayerPrefs.GetInt("AdNum") > 1)
+        if (PlayerPrefs.GetInt("AdNum") == 1)
         {
             PlayerPrefs.SetInt("AdNum", 0);
         }
@@ -87,7 +114,7 @@ public class GameManagerScript : MonoBehaviour
             PlayerPrefs.SetInt("AdNum", PlayerPrefs.GetInt("AdNum") + 1);
         }
 
-        if (PlayerPrefs.GetInt("AdNum") <= 1 && (stealScript.Money>300))
+        if (PlayerPrefs.GetInt("AdNum") <= 1 && (stealScript.Money>0))
         {
             stealScript.adMoneyText.text = "$" + stealScript.Money.ToString();
             gamePaused = true;
@@ -96,8 +123,9 @@ public class GameManagerScript : MonoBehaviour
         }
         else {
             police.SetActive(true);
+            policeCar.SetActive(true);
         }
-
+        music.volume = 0f;
         player.GetComponent<PlayerMovement>().canMove = false;
     }
 
@@ -111,11 +139,17 @@ public class GameManagerScript : MonoBehaviour
             }
         }
 
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            GetComponent<Tutorial>().HideTutorialParts();
+        }
         gameOver = true;
         GetComponent<SoundEffectsPlayer>().playArrestSFX();
         losePanel.SetActive(true);
         gameUIPanel.SetActive(false);
         StartCoroutine("HidePolice");
+        scoreText.text = "Earned Money: $" + stealScript.Money.ToString();
+        highscoreText.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highcore").ToString();
         //GetComponent<SoundEffectsPlayer>().sfxAudioSource.volume = 0;
     }
 
@@ -126,11 +160,14 @@ public class GameManagerScript : MonoBehaviour
         gamePaused = false;
         adPanel.SetActive(false);
         police.SetActive(true);
+        policeCar.SetActive(true);
     }
     IEnumerator HidePolice() {
         yield return new WaitForSeconds(policeWaitTime);
         police.SetActive(false);
         Time.timeScale = 0f;
+        audioMixer.SetFloat("GeneralSoundEffectsVolume", -80f);
+
 
     }
     public void RestartButton() {

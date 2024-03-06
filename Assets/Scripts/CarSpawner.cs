@@ -15,8 +15,8 @@ public class CarSpawner : MonoBehaviour
     public GameObject car;
     [SerializeField] float[] xCarPositions;
     [SerializeField] Transform player;
-
-
+    public bool isPlayerBusted;
+    public GameObject StopPoliceCarTrigger;
     void Start()
     {
         StartCoroutine("carTimer");
@@ -35,7 +35,14 @@ public class CarSpawner : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
             while (currentLane == previousLane)
             {
-                currentLane = Random.Range(1, 4);
+                if (isPlayerBusted)
+                {
+                    currentLane = Random.Range(2, 4);
+                }
+                else
+                {
+                    currentLane = Random.Range(1, 4);
+                }
             }
             previousLane = currentLane;
 
@@ -44,12 +51,19 @@ public class CarSpawner : MonoBehaviour
                 GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], 1.037f, player.position.z - backOfPlayerOffset), transform.rotation);
                 newCar.transform.eulerAngles = new Vector3(0, 0, 0);
                 newCar.GetComponent<CarMovement>().soundEffectsPlayer = GetComponent<SoundEffectsPlayer>();
+                newCar.GetComponent<CarMovement>().row = currentLane;
+
+                if (currentLane == 1)
+                {
+                    newCar.GetComponent<CarMovement>().StopPoliceCarTrigger = StopPoliceCarTrigger;
+                }
             }
             else if (currentLane == 3 || currentLane == 4)
             {
                 GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], 1.037f, player.position.z + frontOfPlayerOffset), transform.rotation);
                 newCar.transform.eulerAngles = new Vector3(0, 180f, 0);
                 newCar.GetComponent<CarMovement>().soundEffectsPlayer = GetComponent<SoundEffectsPlayer>();
+                newCar.GetComponent<CarMovement>().row = currentLane;
             }
         }
 

@@ -46,9 +46,7 @@ public class PowerUpScript : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
-            
-            powerUpSpawner.AddPowerUp(powerUp);            
-            
+            powerUpSpawner.AddPowerUp(powerUp);
             Destroy(this.gameObject);
         }
     }

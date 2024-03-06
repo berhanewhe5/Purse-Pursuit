@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SoundEffectsPlayer : MonoBehaviour
 {
-    public AudioSource sfxAudioSource;
+    public AudioSource ConstantPitchSFXAudioSource;
+    public AudioSource VariablePitchSFXAudioSource;
+    public AudioSource policeSirenSource;
     public AudioClip[] stealMoneySFX;
     public AudioClip multiplierStealMoneySFX;
     public AudioClip[] carDrivingSFX;
@@ -25,68 +27,69 @@ public class SoundEffectsPlayer : MonoBehaviour
 
     public void playStealMoneySFX()
     {
-        sfxAudioSource.PlayOneShot(stealMoneySFX[Random.Range(0, stealMoneySFX.Length)], stealMoneySFXVolume);
+        ConstantPitchSFXAudioSource.PlayOneShot(stealMoneySFX[Random.Range(0, stealMoneySFX.Length)], stealMoneySFXVolume);
     }
 
     public void playMultiplierStealMoneySFX()
     {
-        sfxAudioSource.PlayOneShot(multiplierStealMoneySFX, stealMoneySFXVolume);
+        ConstantPitchSFXAudioSource.PlayOneShot(multiplierStealMoneySFX, stealMoneySFXVolume);
     }
 
     public void playCarDrivingSFX()
     {
-        sfxAudioSource.PlayOneShot(carDrivingSFX[Random.Range(0, carDrivingSFX.Length)], carDrivingSFXVolume);
+        VariablePitchSFXAudioSource.PlayOneShot(carDrivingSFX[Random.Range(0, carDrivingSFX.Length)], carDrivingSFXVolume);
     }
 
     public void playPressButtonSFX()
     {
-        sfxAudioSource.PlayOneShot(pressButtonSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(pressButtonSFX);
     }
 
     public void playPowerUpActivatedSFX()
     {
-        sfxAudioSource.PlayOneShot(powerUpActivatedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(powerUpActivatedSFX);
     }
 
     public void playPowerUpCollectedSFX()
     {
-        sfxAudioSource.PlayOneShot(powerUpCollectedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(powerUpCollectedSFX);
     }
 
     public void playGoalMissedSFX()
     {
-        sfxAudioSource.PlayOneShot(GoalMissedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(GoalMissedSFX);
     }
 
     public void playMultiplierActivatedSFX()
     {
-        sfxAudioSource.PlayOneShot(MultiplierActivatedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(MultiplierActivatedSFX);
     }
 
     public void playPlayerWalkSFX()
     {
-        sfxAudioSource.PlayOneShot(playerWalkSFX);
+        VariablePitchSFXAudioSource.PlayOneShot(playerWalkSFX);
     }
 
     public void playPoliceSirenSFX()
     {
-        sfxAudioSource.PlayOneShot(policeSirenSFX);
+        policeSirenSource.Play();
     }
 
     public void playBumpedManSFX()
     {
-        sfxAudioSource.PlayOneShot(bumpedManSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(bumpedManSFX);
     }
 
     public void playBumpedWomanSFX()
     {
-        sfxAudioSource.PlayOneShot(bumpedWomanSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(bumpedWomanSFX);
     }
 
     public void playArrestSFX()
     {
-        sfxAudioSource.PlayOneShot(arrestSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(arrestSFX);
     }
+
     // Start is called before the first frame update
     void Start()
     {

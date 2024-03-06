@@ -24,7 +24,7 @@ public class SliderController : MonoBehaviour
         {
             if (isSliderMovingUp)
             {
-                pickPocketSlider.value += sliderSpeed * Time.deltaTime;
+                pickPocketSlider.value += sliderSpeed * Time.unscaledDeltaTime;
                 if (pickPocketSlider.value == 1)
                 {
                     isSliderMovingUp = false;
@@ -32,7 +32,7 @@ public class SliderController : MonoBehaviour
             }
             else
             {
-                pickPocketSlider.value += -sliderSpeed * Time.deltaTime;
+                pickPocketSlider.value += -sliderSpeed * Time.unscaledDeltaTime;
                 if (pickPocketSlider.value == 0)
                 {
                     isSliderMovingUp = true;

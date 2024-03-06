@@ -7,6 +7,7 @@ TagManager:
   - StealingCollider
   - PowerUp
   - carSFXTrigger
+  - StopPoliceCarTrigger
   layers:
   - Default
   - TransparentFX

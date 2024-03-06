@@ -10,7 +10,7 @@ public class BuildingSpawner : MonoBehaviour
     public float buildingZIncrement;
     public int buildingCount;
     public int numOfBeginningBuildings;
-
+    int i;
     //-26.63
 
     void Start()
@@ -37,19 +37,26 @@ public class BuildingSpawner : MonoBehaviour
 
     public void SpawnNewBuilding()
     {
-        GameObject newBuildingRight = Instantiate(Building, new Vector3(1f, 0.24f, nextBuildingZPosition), transform.rotation);
+        if (i % 2 == 0)
+        {
+            GameObject newBuildingRight = Instantiate(Building, new Vector3(1f, 0.24f, nextBuildingZPosition), transform.rotation);
 
-        newBuildingRight.GetComponent<BuildingScript>().player = player;
-        newBuildingRight.GetComponent<BuildingScript>().buildingSpawner = this;
-        newBuildingRight.transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            newBuildingRight.GetComponent<BuildingScript>().player = player;
+            newBuildingRight.GetComponent<BuildingScript>().buildingSpawner = this;
+            newBuildingRight.transform.eulerAngles = new Vector3(0f, 0f, 0f);
 
-        GameObject newBuildingLeft = Instantiate(Building, new Vector3(-19.78f, 0.24f, nextBuildingZPosition), transform.rotation);
-        newBuildingLeft.GetComponent<BuildingScript>().player = player;
-        newBuildingLeft.GetComponent<BuildingScript>().buildingSpawner = this;
-        newBuildingLeft.transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            GameObject newBuildingLeft = Instantiate(Building, new Vector3(-19.78f, 0.24f, nextBuildingZPosition), transform.rotation);
+            newBuildingLeft.GetComponent<BuildingScript>().player = player;
+            newBuildingLeft.GetComponent<BuildingScript>().buildingSpawner = this;
+            newBuildingLeft.transform.eulerAngles = new Vector3(0f, 180f, 0f);
 
-        nextBuildingZPosition += buildingZIncrement;
+            nextBuildingZPosition += buildingZIncrement;
 
-        buildingCount++;
+            buildingCount++;
+            i++;
+        }
+        else {
+            i++;
+        }
     }
 }
