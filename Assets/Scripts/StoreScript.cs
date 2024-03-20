@@ -124,9 +124,6 @@ public class StoreScript : MonoBehaviour
     public void setCostumeKey(int key)
     {
         costumeKey = key;
-
-
-
     }
 
     public void setCostumeImage(Texture texture)
@@ -267,7 +264,7 @@ public class StoreScript : MonoBehaviour
         ExitAllPanels();
         upgradesPanel.SetActive(true);
         ReCheckTierValues();
-        storeTitle.text = "Upgrades";
+        storeTitle.text = "Power Ups";
         currentPrice = 0;
     }
 
@@ -293,6 +290,7 @@ public class StoreScript : MonoBehaviour
                 costumePrice.text = "";
                 buyCostumeText.text = "Select";
                 buyButtonState = false;
+                GetComponent<SoundEffectsPlayer>().playPurchaseItemSFX();
             }
             SetCostume();
         }
@@ -428,6 +426,7 @@ public class StoreScript : MonoBehaviour
 
             upgradePrice.text = "Price: " + DetermineCurrentUpgradePrice(PlayerPrefs.GetInt("SpeedBoostTier") +speedBoostCurrentTier).ToString();
             speedBoostCurrentTier++;
+            GetComponent<SoundEffectsPlayer>().playIncreaseUpgradeSFX();
             if ((PlayerPrefs.GetInt("SpeedBoostTier") + speedBoostCurrentTier) == 5)
             {
                 speedBoostButton.interactable = false;
@@ -443,6 +442,7 @@ public class StoreScript : MonoBehaviour
 
             upgradePrice.text = "Price: " + DetermineCurrentUpgradePrice(PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier).ToString();
             instantStealCurrentTier++;
+            GetComponent<SoundEffectsPlayer>().playIncreaseUpgradeSFX();
             if ((PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier) == 5)
             {
                 instantStealButton.interactable = false;
@@ -458,6 +458,7 @@ public class StoreScript : MonoBehaviour
 
             upgradePrice.text = "Price: " + DetermineCurrentUpgradePrice(PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier).ToString();
             invisibleCloakCurrentTier++;
+            GetComponent<SoundEffectsPlayer>().playIncreaseUpgradeSFX();
             if ((PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier) == 5)
             {
                 invisibleCloakButton.interactable = false;
@@ -473,6 +474,7 @@ public class StoreScript : MonoBehaviour
 
             upgradePrice.text = "Price: " + DetermineCurrentUpgradePrice(PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier).ToString();
             multiplierCurrentTier++;
+            GetComponent<SoundEffectsPlayer>().playIncreaseUpgradeSFX();
             if ((PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier) == 5)
             {
                 multiplierButton.interactable = false;
@@ -516,6 +518,7 @@ public class StoreScript : MonoBehaviour
                 PlayerPrefs.SetInt("MultiplierTier", PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier);
                 Debug.Log("SpeedBoostTier: " + PlayerPrefs.GetInt("SpeedBoostTier"));
                 ReCheckTierValues();
+                GetComponent<SoundEffectsPlayer>().playPurchaseItemSFX();
             }
         }
     }

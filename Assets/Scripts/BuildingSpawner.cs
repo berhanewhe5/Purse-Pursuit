@@ -11,6 +11,7 @@ public class BuildingSpawner : MonoBehaviour
     public int buildingCount;
     public int numOfBeginningBuildings;
     int i;
+
     //-26.63
 
     void Start()

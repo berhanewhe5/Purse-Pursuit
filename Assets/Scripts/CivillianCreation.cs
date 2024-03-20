@@ -33,6 +33,8 @@ public class CivillianCreation : MonoBehaviour
     public int pantsMat;
     public int shoesMat;
 
+    public bool hasGlasses;
+    public bool hasSuit;
 
     int hairChance;
     int glassesChance;
@@ -75,6 +77,7 @@ public class CivillianCreation : MonoBehaviour
         {
             glasses.SetActive(true);
             glasses.GetComponent<SkinnedMeshRenderer>().material.color = glassesColor[Random.Range(0, glassesColor.Length)];
+            hasGlasses = true;
         }
         if (suitChance == 8)
         {
@@ -85,7 +88,7 @@ public class CivillianCreation : MonoBehaviour
             skinnedMeshRenderer.materials[tShirtMat].color = Color.white;
             skinnedMeshRenderer.materials[shortMat].color = suitColor;
             skinnedMeshRenderer.materials[pantsMat].color = suitColor;
-
+            hasSuit = true;
             tieChance = Random.Range(0, 2);
             if (tieChance == 1)
             {

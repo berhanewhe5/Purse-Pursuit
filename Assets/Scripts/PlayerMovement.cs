@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEditor;
-using UnityEditor.DeviceSimulation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +37,10 @@ public class PlayerMovement : MonoBehaviour
     public CarSpawner carSpawner;
 
     public GameManagerScript gameManager;
+    public SoundEffectsPlayer soundEffectsPlayer;
+
+    public bool speedPowerUpActive = false; 
+    public float speedPowerUpMultiplier;
     void Start()
     {
         handCuffs.SetActive(false);
@@ -73,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
                     {
                         if (playerRow != 1)
                         {
+                            soundEffectsPlayer.playSwipeSFX();
                             playerVelocity += Vector3.left * horizontalSpeed;
                             horizontalMovedApplied = false;
                             playerRow -= 1;
@@ -86,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
                     {
                         if (playerRow != 5)
                         {
+                            soundEffectsPlayer.playSwipeSFX();
                             playerVelocity += Vector3.right * horizontalSpeed;
                             horizontalMovedApplied = false;
                             playerRow += 1;
@@ -111,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 if (playerRow != 5)
                                 {
+                                    soundEffectsPlayer.playSwipeSFX();
                                     playerVelocity += Vector3.right * horizontalSpeed;
                                     horizontalMovedApplied = false;
                                     playerRow += 1;
@@ -123,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
                                 {
                                     if (playerRow != 1)
                                     {
+                                        soundEffectsPlayer.playSwipeSFX();
                                         playerVelocity += Vector3.left * horizontalSpeed;
                                         horizontalMovedApplied = false;
                                         playerRow -= 1;
@@ -152,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 if (playerRow != 5)
                                 {
+                                    soundEffectsPlayer.playSwipeSFX();
                                     playerVelocity += Vector3.right * horizontalSpeed;
                                     horizontalMovedApplied = false;
                                     playerRow += 1;
@@ -165,6 +173,7 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 if (playerRow != 1)
                                 {
+                                    soundEffectsPlayer.playSwipeSFX();
                                     playerVelocity += Vector3.left * horizontalSpeed;
                                     horizontalMovedApplied = false;
                                     playerRow -= 1;
@@ -220,13 +229,16 @@ public class PlayerMovement : MonoBehaviour
         float t = powerUpTime;
 
         StartCoroutine(speedPowerUp(s, t));
+        speedPowerUpMultiplier = speedMultiplier;
     }
 
     public IEnumerator speedPowerUp(float speedMultiplier, float powerUpTime)
     {
+        speedPowerUpActive = true;
         fowardSpeed *= speedMultiplier;
         yield return new WaitForSeconds(powerUpTime);
         fowardSpeed /= speedMultiplier;
+        speedPowerUpActive = false;
     }
 
 }

@@ -48,6 +48,8 @@ public class GameManagerScript : MonoBehaviour
         menuMoneyText.text = "$"+PlayerPrefs.GetInt("Money").ToString();
         Time.timeScale = 1f;
         audioMixer.SetFloat("GeneralSoundEffectsVolume", 0f);
+        GetComponent<VolumeSettings>().LoadMusicVolume();
+        GetComponent<VolumeSettings>().LoadSoundEffectsVolume();
         if (restarted)
         {
             Play();
@@ -77,7 +79,7 @@ public class GameManagerScript : MonoBehaviour
 
     IEnumerator GenerateFirstGoal()
     {
-        yield return new WaitForSeconds(Random.Range(10f, 15f));
+        yield return new WaitForSeconds(Random.Range(6f, 9f));
         GetComponent<StealGoalScript>().GenerateGoal();
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
@@ -97,6 +99,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void Lose()
     {
+        GetComponent<SoundEffectsPlayer>().playMissedAStealSFX();
         stealScript.gameActive = false;
         PlayerPrefs.GetInt("Highcore");
 
@@ -208,6 +211,9 @@ public class GameManagerScript : MonoBehaviour
     {
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
         settingsPanel.SetActive(true);
+        GetComponent<VolumeSettings>().LoadMusicVolume();
+        GetComponent<VolumeSettings>().LoadSoundEffectsVolume();
+
     }
 
     public void ExitSettingsButton()

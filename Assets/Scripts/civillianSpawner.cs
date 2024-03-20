@@ -49,7 +49,6 @@ public class civillianSpawner : MonoBehaviour
             }
             Vector3 spawnPosition = new Vector3(spawnPositions[num], civillianSpawnY, civillianSpawnZ);
             int civillianType = Random.Range(0, 2);
-            Debug.Log(civillianType);
             if (civillianType == 0)
             {
                 GameObject currentCivillian = Instantiate(civillianMan, spawnPosition, transform.rotation);
@@ -92,7 +91,6 @@ public class civillianSpawner : MonoBehaviour
                     }
                     Vector3 spawnPosition = new Vector3(spawnPositions[num], civillianSpawnY, civillianSpawnZ);
                     int civillianType = Random.Range(0, 2);
-                    Debug.Log(civillianType);
                     if (civillianType == 0)
                     {
                         GameObject currentCivillian = Instantiate(civillianMan, spawnPosition, transform.rotation);
@@ -113,7 +111,6 @@ public class civillianSpawner : MonoBehaviour
                     int num = Random.Range(0, spawnPositions.Length);
                     Vector3 spawnPosition = new Vector3(spawnPositions[num], civillianSpawnY, civillianSpawnZ);
                     int civillianType = Random.Range(0, 2);
-                    Debug.Log(civillianType);
                     if (civillianType == 0)
                     {
                         GameObject currentCivillian = Instantiate(civillianMan, spawnPosition, transform.rotation);

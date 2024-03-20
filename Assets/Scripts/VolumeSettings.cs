@@ -12,6 +12,11 @@ public class VolumeSettings : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
+            PlayerPrefs.SetFloat("MusicVolume", 0.5f);
+        }
         if (PlayerPrefs.HasKey("SoundEffectsVolume"))
         {
             LoadSoundEffectsVolume();
@@ -33,7 +38,7 @@ public class VolumeSettings : MonoBehaviour
     public void SetSoundEffectsVolume()
     {
         float volume = soundEffectsVolumeSlider.value;
-        audioMixer.SetFloat("SoundEffectsVolume", Mathf.Log10(volume)*20);
+        audioMixer.SetFloat("SoundEffectsVolume", Mathf.Log10(volume) *20);
         PlayerPrefs.SetFloat("SoundEffectsVolume", volume);
     }
 
@@ -45,13 +50,13 @@ public class VolumeSettings : MonoBehaviour
     }
     public void LoadMusicVolume()
     { 
-        soundEffectsVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         SetMusicVolume();
     }
 
     public void LoadSoundEffectsVolume()
     {
-        musicVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        soundEffectsVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume");
         SetSoundEffectsVolume();
     }
 }

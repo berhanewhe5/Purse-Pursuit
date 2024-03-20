@@ -13,16 +13,11 @@ public class BumpPlayerScript : MonoBehaviour
         {
             if (isMan)
             {
-                Debug.Log("Bumped");
                 soundEffectsPlayer.playBumpedManSFX();
             }
             else if (isWoman)
             {
-                Debug.Log("Bumped");
                 soundEffectsPlayer.playBumpedWomanSFX();
-            }
-            else {
-                Debug.Log("Bumped outside");
             }
 
             GetComponentInParent<CivillianMovement>().civillianSpawner.civillianCount--;

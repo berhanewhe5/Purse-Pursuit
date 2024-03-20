@@ -103,8 +103,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  carLifeTime: 6.25
+  carLifeTime: 4
   soundEffectsPlayer: {fileID: 0}
+  row: 0
+  StopPoliceCarTrigger: {fileID: 0}
 --- !u!54 &878970350901085855
 Rigidbody:
   m_ObjectHideFlags: 0

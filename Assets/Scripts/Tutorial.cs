@@ -24,6 +24,7 @@ public class Tutorial : MonoBehaviour
     }
     public void EndTutorial()
     {
+        GetComponent<SoundEffectsPlayer>().playCompleteTutorialSFX();
         TutorialPanel.SetActive(false);
         PlayerPrefs.SetInt("GamePlayedBefore", 1);
     }
@@ -70,6 +71,7 @@ public class Tutorial : MonoBehaviour
         {
             HideTutorialParts();
             TutorialPanelPart4.SetActive(true);
+            GetComponent<SoundEffectsPlayer>().playTutorialSFX();
             tutorialPart = 5;
         }
     }
@@ -80,6 +82,7 @@ public class Tutorial : MonoBehaviour
         {
             HideTutorialParts();
             TutorialPanelPart5.SetActive(true);
+            GetComponent<SoundEffectsPlayer>().playTutorialSFX();
             tutorialPart = 6;
         }
     }
@@ -90,6 +93,7 @@ public class Tutorial : MonoBehaviour
         {
             HideTutorialParts();
             TutorialPanelPart6.SetActive(true);
+            GetComponent<SoundEffectsPlayer>().playTutorialSFX();
             tutorialPart = 7;
         }
     }

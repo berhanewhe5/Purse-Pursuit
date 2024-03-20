@@ -22,11 +22,13 @@ public class StealScript : MonoBehaviour
 
     public int minToSteal;
     public int maxToSteal;
+    public int moneyIncrement;
     public float minToLose;
     public float maxToLose;
 
     public int Money;
     public float multiplier=1;
+    public float clothesMultiplier;
     [SerializeField] private TMP_Text moneyText;
     public TMP_Text adMoneyText;
 
@@ -59,15 +61,26 @@ public class StealScript : MonoBehaviour
     public int stealAttempts;
     public bool canSteal;
     bool firstStealCompleted = false;
+
+    bool sfxPlayed;
     private void Start()
     {
+        moneyIncrement = 0;
         ChooseRandomGreenArea();
         gameActive = false;
 
         Money = 0;
         moneyText.text = "$" + Money.ToString();
 
-        canSteal = (PlayerPrefs.GetInt("GamePlayedBefore") == 1);
+        if(PlayerPrefs.GetInt("GamePlayedBefore") == 1)
+        {
+            canSteal = true;
+        }
+        else
+        {
+            canSteal = false;
+        }
+        Debug.Log(canSteal);    
     }
 
     void Update()
@@ -79,7 +92,20 @@ public class StealScript : MonoBehaviour
             if ((Physics.CheckSphere(this.transform.position, stealColliderRadius, civillianColliderMask) == true) && (Physics.Raycast(new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z), this.transform.forward * rayLength, rayLength, civillianColliderMask) == false))
             {
                 inStealingZone = true;
-
+                Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
+                
+                if (civillian[0].transform.parent.gameObject.GetComponent<CivillianCreation>().hasGlasses && civillian[0].transform.parent.gameObject.GetComponent<CivillianCreation>().hasSuit)
+                {
+                    clothesMultiplier = 2f;
+                }
+                else if (civillian[0].transform.parent.gameObject.GetComponent<CivillianCreation>().hasGlasses || civillian[0].transform.parent.gameObject.GetComponent<CivillianCreation>().hasSuit)
+                {
+                    clothesMultiplier = 1.5f;
+                }
+                else {
+                    clothesMultiplier = 1f;
+                }
+                
                 if (canSteal)
                 {
                     if (!instantSteaalPowerUpActivated)
@@ -87,14 +113,34 @@ public class StealScript : MonoBehaviour
                         stealSlider.SetActive(true);
                         if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
                         {
-                            Time.timeScale = slowedDownTime;
+                            if (GetComponent<PlayerMovement>().speedPowerUpActive == true)
+                            {
+                                Time.timeScale = slowedDownTime / GetComponent<PlayerMovement>().speedPowerUpMultiplier;
+                            }
+                            else
+                            {
+                                Time.timeScale = slowedDownTime;
+                            }
                         }
                         else {
                             if (firstStealCompleted)
                             {
-                                Time.timeScale = slowedDownTime;
+                                if (GetComponent<PlayerMovement>().speedPowerUpActive == true)
+                                {
+                                    Time.timeScale = slowedDownTime/GetComponent<PlayerMovement>().speedPowerUpMultiplier;
+                                }
+                                else { 
+                                    Time.timeScale = slowedDownTime;
+
+                                }
+
                             }
-                            else { 
+                            else {
+                                if (sfxPlayed == false)
+                                {
+                                    soundEffectsPlayer.playTutorialSFX();
+                                    sfxPlayed = true;
+                                }
                                 Time.timeScale = 0.01f;
                                 
                             }
@@ -109,7 +155,6 @@ public class StealScript : MonoBehaviour
                     else
                     {
                         StealMoney();
-                        Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
                         Destroy(civillian[0]);
                     }
                 }
@@ -215,13 +260,13 @@ public class StealScript : MonoBehaviour
 
     public void StealMoney()
     {
-        int newMoney = UnityEngine.Random.Range(minToSteal, maxToSteal);
+        int newMoney = UnityEngine.Random.Range(minToSteal+moneyIncrement, maxToSteal+moneyIncrement);
         increaseMoneyAlertAnimator.SetTrigger("IncreaseMoney");
         increaseMoneyAlertText.text = "+" + newMoney.ToString();
         increaseMoneyAlertText.color = Color.green;
         if (stealGoalScript.goalActivated == true)
         {
-            stealGoalScript.UpdateGoal(newMoney);
+            stealGoalScript.UpdateGoal((int)Math.Round(((float)newMoney * clothesMultiplier)));
             soundEffectsPlayer.playStealMoneySFX();
             if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
             {
@@ -234,13 +279,13 @@ public class StealScript : MonoBehaviour
         }
         else {
             Money += (int)Math.Round((float)newMoney * multiplier);
-            increaseMoneyAlertText.text = "+" + (int)Math.Round((float)newMoney * multiplier);
+            increaseMoneyAlertText.text = "+" + (int)Math.Round((float)newMoney * multiplier * clothesMultiplier);
             moneyText.text = "$" + Money.ToString();
             increaseMoneyAlertText.color = Color.green;
-            PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + (int)Math.Round((float)newMoney * multiplier));
+            PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + (int)Math.Round((float)newMoney * multiplier * clothesMultiplier));
             if (multiplier > 1)
             {
-                soundEffectsPlayer.playMultiplierStealMoneySFX();
+                soundEffectsPlayer.playStealMoneySFX();
             }
             else
             {

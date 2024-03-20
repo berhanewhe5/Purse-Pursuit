@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static System.Net.Mime.MediaTypeNames;
 
 public class StealGoalScript : MonoBehaviour
 {
@@ -57,7 +56,7 @@ public class StealGoalScript : MonoBehaviour
     public string[] GoalDescriptionType4;
 
     public string goalDescriptionText;
-
+    public int goalRewardIncrement;
     private void Start()
     {
         
@@ -95,6 +94,10 @@ public class StealGoalScript : MonoBehaviour
         timeLeftSeconds = 0;
         timeLeftMinutes = 0;
         int time = goalTimer[Random.Range(0,goalTimer.Length-1)];
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            time = 59;
+        }
         GoalDescriptionText.text = GenerateGoalDescription(time);
         int moneyGoal = moneyBase + ((time-minTime+timeIntervals)/timeIntervals) * Random.Range(minMoney,maxMoney);
         EditGoal(moneyGoal);
@@ -113,10 +116,12 @@ public class StealGoalScript : MonoBehaviour
         StartCoroutine("Timer");
         goalActivated = true;
         ShowGoalUI();
+
     }
 
     string GenerateGoalDescription(int time)
     {
+
         string goalDescription = "";
 
         if (time >= 30 && time < 60)
@@ -146,16 +151,21 @@ public class StealGoalScript : MonoBehaviour
 
     IEnumerator goalReached()
     {
+        stealScript.moneyIncrement += goalRewardIncrement;
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
             GetComponent<Tutorial>().TutorialPart6();
+        }
+        else { 
+            multiplerActivatedText.SetActive(true);
+
         }
         GetComponent<SoundEffectsPlayer>().playMultiplierActivatedSFX();
         HideGoalUI();
         MultiplerRewardUI.SetActive(true);
         MultiplerText.text = multipler.ToString() + "x";
         StartCoroutine(MultiplierTimer(multiplierTime + (3 * PlayerPrefs.GetInt("MultiplierTier"))));
-        multiplerActivatedText.SetActive(true);
+        
         yield return new WaitForSeconds(2f);
         multiplerActivatedText.SetActive(false);
 
@@ -252,6 +262,8 @@ public class StealGoalScript : MonoBehaviour
 
     public void ShowGoalUI()
     {
+        GetComponent<SoundEffectsPlayer>().playBillPopsUpSFX();
+
         GoalUI.SetActive(true);
     }
     void Update()

@@ -40,18 +40,15 @@ public class BuildingCreation : MonoBehaviour
         }
 
         int randomIndex = Random.Range(0, buildingModels.Length);
-
-        if (randomIndex == 9)
-        {
-            buildingMesh = this.gameObject.GetComponent<MeshRenderer>();
-            GetComponent<MeshRenderer>().material = commonMat;
-
-        }
-        else { 
-            GetComponent<MeshRenderer>().materials[0].color = buildingColorsWithChance[Random.Range(0, buildingColorsWithChance.Length)];
-        }
         GetComponent<MeshFilter>().mesh = buildingModels[randomIndex].GetComponent<MeshFilter>().sharedMesh;
+        buildingMesh = this.gameObject.GetComponent<MeshRenderer>();
 
+        if (randomIndex != 6)
+        {
+            buildingMesh.materials[0].color = buildingColorsWithChance[Random.Range(0, buildingColorsWithChance.Length)];
+
+
+        }
     }
 
     // Update is called once per frame

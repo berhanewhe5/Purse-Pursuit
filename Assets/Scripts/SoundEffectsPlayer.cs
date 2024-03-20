@@ -11,7 +11,14 @@ public class SoundEffectsPlayer : MonoBehaviour
     public AudioClip multiplierStealMoneySFX;
     public AudioClip[] carDrivingSFX;
     public AudioClip pressButtonSFX;
+    public AudioClip purchaseItemSFX;
+    public AudioClip BillPopsUpSFX;
+    public AudioClip CompleteTutorialSFX;
+    public AudioClip MissedAStealSFX;
+    public AudioClip IncreaseUpgradeSFX;
     public AudioClip GoalMissedSFX;
+    public AudioClip SwipeSFX;
+    public AudioClip TutorialSFX;
     public AudioClip MultiplierActivatedSFX;
     public AudioClip playerWalkSFX;
     public AudioClip policeSirenSFX;
@@ -24,7 +31,12 @@ public class SoundEffectsPlayer : MonoBehaviour
     public float stealMoneySFXVolume;
     [Range(0,1)]
     public float carDrivingSFXVolume;
-
+    [Range(0, 1)]
+    public float swipeSFXVolume;
+    [Range(0, 1)]
+    public float multiplierSFXVolume;
+    [Range(0, 1)]
+    public float collectPowerUpSFXVolume;
     public void playStealMoneySFX()
     {
         ConstantPitchSFXAudioSource.PlayOneShot(stealMoneySFX[Random.Range(0, stealMoneySFX.Length)], stealMoneySFXVolume);
@@ -47,12 +59,12 @@ public class SoundEffectsPlayer : MonoBehaviour
 
     public void playPowerUpActivatedSFX()
     {
-        ConstantPitchSFXAudioSource.PlayOneShot(powerUpActivatedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(powerUpActivatedSFX, collectPowerUpSFXVolume);
     }
 
     public void playPowerUpCollectedSFX()
     {
-        ConstantPitchSFXAudioSource.PlayOneShot(powerUpCollectedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(powerUpCollectedSFX, collectPowerUpSFXVolume);
     }
 
     public void playGoalMissedSFX()
@@ -62,7 +74,7 @@ public class SoundEffectsPlayer : MonoBehaviour
 
     public void playMultiplierActivatedSFX()
     {
-        ConstantPitchSFXAudioSource.PlayOneShot(MultiplierActivatedSFX);
+        ConstantPitchSFXAudioSource.PlayOneShot(MultiplierActivatedSFX,multiplierSFXVolume);
     }
 
     public void playPlayerWalkSFX()
@@ -89,6 +101,42 @@ public class SoundEffectsPlayer : MonoBehaviour
     {
         ConstantPitchSFXAudioSource.PlayOneShot(arrestSFX);
     }
+
+    public void playBillPopsUpSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(BillPopsUpSFX);
+    }
+
+    public void playPurchaseItemSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(purchaseItemSFX);
+    }
+
+    public void playCompleteTutorialSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(CompleteTutorialSFX);
+    }
+
+    public void playSwipeSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(SwipeSFX, swipeSFXVolume);
+    }
+
+    public void playTutorialSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(TutorialSFX);
+    }
+
+    public void playMissedAStealSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(MissedAStealSFX);
+    }
+
+    public void playIncreaseUpgradeSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(IncreaseUpgradeSFX);
+    }
+
 
     // Start is called before the first frame update
     void Start()

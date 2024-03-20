@@ -73,7 +73,7 @@ public class PowerUpButton : MonoBehaviour
             case 2:
                 powerUpSpawner.SpeedBoostActivated = true;
                 player.GetComponent<PlayerMovement>().callSpeedPowerUp(speedPowerUpMultiplier, speedPowerUpTime);
-                powerUpSpawner.callTimer(speedPowerUpTime + (PlayerPrefs.GetInt("MSpeedBoostTier") * 3), this.gameObject);
+                powerUpSpawner.callTimer(speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3), this.gameObject);
                 break;
         }
         powerUpSpawner.numOfPowerUps--;
