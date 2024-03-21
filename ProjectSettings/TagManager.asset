@@ -8,6 +8,7 @@ TagManager:
   - PowerUp
   - carSFXTrigger
   - StopPoliceCarTrigger
+  - DestroyCar
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Firefighter Costume
   - Guy Costume
   - Nerd Costume
-  - 
+  - Konita Costtume
   - 
   - 
   - 

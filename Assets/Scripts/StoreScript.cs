@@ -29,6 +29,7 @@ public class StoreScript : MonoBehaviour
     public Texture princessTexture;
     public Texture nerdTexture;
     public Texture criminalTexture;
+    public Texture konitaTexture;
 
     bool buyButtonState;
     int currentPrice;
@@ -85,7 +86,16 @@ public class StoreScript : MonoBehaviour
         {
             Debug.Log(currentCostume + "Purchased");
             costumePrice.text = "$" + price.ToString();
-            buyCostumeText.text = "Buy";
+            if (costumeKey == 6)
+            {
+
+                costumePrice.text = "Subscribe to Konita";
+                buyCostumeText.text = "Subscribe";
+            }
+            else { 
+                buyCostumeText.text = "Buy";
+                
+            }
             buyButtonState = true;
             currentPrice = price;
 
@@ -163,10 +173,14 @@ public class StoreScript : MonoBehaviour
         {
             costumeKey = 5;
         }
-         else
-         {
+        else if (PlayerPrefs.GetInt("KonitaSelected") == 1)
+        {
+            costumeKey = 6;
+        }
+        else
+        {
             costumeKey = 1;
-         }
+        }
 
         SetCostume();
     }
@@ -193,7 +207,6 @@ public class StoreScript : MonoBehaviour
     public void CostumeButton()
     {
         ExitAllPanels();
-
 
         if (PlayerPrefs.GetInt("GuySelected") == 1)
         {
@@ -231,6 +244,14 @@ public class StoreScript : MonoBehaviour
         {
             setCostumeName("Criminal");
             setCostumeImage(criminalTexture);
+            costumePrice.text = "";
+            buyCostumeText.text = "Select";
+            buyCostumeButton.interactable = false;
+        }
+        else if (PlayerPrefs.GetInt("KonitaSelected") == 1)
+        {
+            setCostumeName("Konita");
+            setCostumeImage(konitaTexture);
             costumePrice.text = "";
             buyCostumeText.text = "Select";
             buyCostumeButton.interactable = false;
@@ -283,9 +304,15 @@ public class StoreScript : MonoBehaviour
     {
         if (buyButtonState)
         {
-            if (PlayerPrefs.GetInt("Money") > currentPrice)
+            if (PlayerPrefs.GetInt("Money") >= currentPrice)
             {
-                PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - currentPrice);
+                if (costumeKey == 6)
+                {
+                    GetComponent<GameManagerScript>().SubscribeToKonita();
+                }
+                else { 
+                    PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - currentPrice);
+                }
                 PlayerPrefs.SetInt(currentCostume + "Purchased", 1);
                 costumePrice.text = "";
                 buyCostumeText.text = "Select";
@@ -332,6 +359,7 @@ public class StoreScript : MonoBehaviour
         PlayerPrefs.SetInt("PrincessSelected", 0);
         PlayerPrefs.SetInt("NerdSelected", 0);
         PlayerPrefs.SetInt("CriminalSelected", 0);
+        PlayerPrefs.SetInt("KonitaSelected", 0);
     }
 
     public void ReCheckTierValues()
@@ -509,7 +537,7 @@ public class StoreScript : MonoBehaviour
     {
         if (currentPrice != 0)
         {
-            if (PlayerPrefs.GetInt("Money") > currentPrice)
+            if (PlayerPrefs.GetInt("Money") >= currentPrice)
             {
                 PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - currentPrice);
                 PlayerPrefs.SetInt("SpeedBoostTier", PlayerPrefs.GetInt("SpeedBoostTier") + speedBoostCurrentTier);

@@ -11,8 +11,7 @@ public class Tutorial : MonoBehaviour
     public GameObject TutorialPanelPart4;
     public GameObject TutorialPanelPart5;
     public GameObject TutorialPanelPart6;
-
-    int tutorialPart;
+    public int tutorialPart;
     void Start()
     {
         
@@ -27,6 +26,11 @@ public class Tutorial : MonoBehaviour
         GetComponent<SoundEffectsPlayer>().playCompleteTutorialSFX();
         TutorialPanel.SetActive(false);
         PlayerPrefs.SetInt("GamePlayedBefore", 1);
+
+        if (!GetComponent <GameManagerScript> ().player.GetComponent<StealScript>().firstStealCompleted)
+        {
+            GetComponent<StealGoalScript>().GenerateGoal();
+        }
     }
 
     public void TutorialPart1()

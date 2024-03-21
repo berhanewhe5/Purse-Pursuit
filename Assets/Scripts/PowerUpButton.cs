@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,23 +21,16 @@ public class PowerUpButton : MonoBehaviour
 
     public GameObject player;
     public PowerUpSpawner powerUpSpawner;
+
+    public TMP_Text powerUpTimerText;
+    public float powerUpTimer;
+    public SoundEffectsPlayer soundEffectsPlayer;
     void Start()
     {
-        
+        powerUpTimerText.text = "";
+        Invoke("PowerUpButtonClicked", 0.5f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(powerUpSpawner.powerUpTimerGameObject.activeInHierarchy == false)
-        {
-            GetComponent<Button>().interactable = true;
-        }
-        else
-        {
-            GetComponent<Button>().interactable = false;
-        }
-    }
 
     public void SetPowerUpImage()
     {
@@ -62,20 +56,39 @@ public class PowerUpButton : MonoBehaviour
         {
             case 0:
                 powerUpSpawner.InstantStealActivated = true;
-                player.GetComponent<StealScript>().callInstantStealPowerUp(instantStealPowerUpTime);
-                powerUpSpawner.callTimer(instantStealPowerUpTime+(PlayerPrefs.GetInt("InstantStealTier")*3), this.gameObject);
+                player.GetComponent<StealScript>().callInstantStealPowerUp(instantStealPowerUpTime + (PlayerPrefs.GetInt("InstantStealTier") * 3));
+                callTimer(instantStealPowerUpTime+(PlayerPrefs.GetInt("InstantStealTier")*3));
                 break;
             case 1:
                 powerUpSpawner.InvisibleCloakActivated = true;
-                player.GetComponent<StealScript>().callInvisibleCloakPowerUpPowerUp(invisibleCloakTime);
-                powerUpSpawner.callTimer(invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3), this.gameObject);
+                player.GetComponent<StealScript>().callInvisibleCloakPowerUpPowerUp(invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3));
+                callTimer(invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3));
                 break;
             case 2:
                 powerUpSpawner.SpeedBoostActivated = true;
-                player.GetComponent<PlayerMovement>().callSpeedPowerUp(speedPowerUpMultiplier, speedPowerUpTime);
-                powerUpSpawner.callTimer(speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3), this.gameObject);
+                player.GetComponent<PlayerMovement>().callSpeedPowerUp(speedPowerUpMultiplier, speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3));
+                callTimer(speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3));
                 break;
         }
         powerUpSpawner.numOfPowerUps--;
+    }
+
+    public void callTimer(float time)
+    {
+        float t = time;
+        StartCoroutine(PowerUpTimer(t));
+    }
+
+    IEnumerator PowerUpTimer(float time)
+    {
+        soundEffectsPlayer.playPowerUpActivatedSFX();
+        float t = time;
+        while (t > 0)
+        {
+            powerUpTimerText.text = t.ToString();
+            yield return new WaitForSeconds(1);
+            t--;
+        }
+        Destroy(this.gameObject);
     }
 }

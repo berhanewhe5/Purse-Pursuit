@@ -60,7 +60,7 @@ public class StealScript : MonoBehaviour
 
     public int stealAttempts;
     public bool canSteal;
-    bool firstStealCompleted = false;
+    public bool firstStealCompleted = false;
 
     bool sfxPlayed;
     private void Start()
@@ -255,7 +255,10 @@ public class StealScript : MonoBehaviour
     {
         Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
         Destroy(civillian[0]);
-        LoseMoney();
+        if (!invisibleCloakPowerUpActivated)
+        {
+            LoseMoney();
+        }
     }
 
     public void StealMoney()
@@ -271,7 +274,7 @@ public class StealScript : MonoBehaviour
             if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
             {
                 stealAttempts++;
-                if (stealAttempts == 3)
+                if (stealAttempts == 2)
                 {
                     GetComponent<PlayerMovement>().gameManager.GetComponent<Tutorial>().HideTutorialParts();
                 }

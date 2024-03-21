@@ -94,12 +94,17 @@ public class StealGoalScript : MonoBehaviour
         timeLeftSeconds = 0;
         timeLeftMinutes = 0;
         int time = goalTimer[Random.Range(0,goalTimer.Length-1)];
+
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
             time = 59;
         }
         GoalDescriptionText.text = GenerateGoalDescription(time);
         int moneyGoal = moneyBase + ((time-minTime+timeIntervals)/timeIntervals) * Random.Range(minMoney,maxMoney);
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            moneyGoal = 100;
+        }
         EditGoal(moneyGoal);
         
         goalProgress = 0;

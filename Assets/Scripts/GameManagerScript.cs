@@ -14,6 +14,7 @@ public class GameManagerScript : MonoBehaviour
     public GameObject pausedPanel;
     public GameObject settingsPanel;
     public GameObject storePanel;
+    public GameObject infoPanel;
     public StealScript stealScript;
     public bool gamePaused;
     public GameObject police;
@@ -21,6 +22,7 @@ public class GameManagerScript : MonoBehaviour
     public GameObject player;
     public bool gameOver;
     public TMP_Text menuMoneyText;
+    public TMP_Text mostEarnedMoneyInfo;
 
     static bool restarted;
 
@@ -43,6 +45,8 @@ public class GameManagerScript : MonoBehaviour
         gameUIPanel.SetActive(false);
         settingsPanel.SetActive(false);
         adPanel.SetActive(false);
+        infoPanel.SetActive(false);
+
         gamePaused = true;
         gameOver = false;
         menuMoneyText.text = "$"+PlayerPrefs.GetInt("Money").ToString();
@@ -79,7 +83,7 @@ public class GameManagerScript : MonoBehaviour
 
     IEnumerator GenerateFirstGoal()
     {
-        yield return new WaitForSeconds(Random.Range(6f, 9f));
+        yield return new WaitForSeconds(5f);
         GetComponent<StealGoalScript>().GenerateGoal();
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
@@ -97,6 +101,11 @@ public class GameManagerScript : MonoBehaviour
         
     }
 
+    public void PlayTutorial()
+    {
+        PlayerPrefs.SetInt("GamePlayedBefore", 0);
+        Play();
+    }
     public void Lose()
     {
         GetComponent<SoundEffectsPlayer>().playMissedAStealSFX();
@@ -228,9 +237,24 @@ public class GameManagerScript : MonoBehaviour
         GetComponent<StoreScript>().CostumeButton();
     }
 
+    public void InfoButton()
+    {
+        infoPanel.SetActive(true);
+        mostEarnedMoneyInfo.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highcore").ToString();
+    }
+
+    public void ExitInfoButton()
+    {
+        infoPanel.SetActive(false);
+    }
     public void ExitStoreButton()
     {
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
         storePanel.SetActive(false);
+    }
+
+    public void SubscribeToKonita()
+    {
+        Application.OpenURL("https://www.youtube.com/channel/UCFyZBN6YExccgHAw3hSBfdg?sub_confirmation=1");
     }
 }

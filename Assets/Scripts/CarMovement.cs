@@ -6,7 +6,6 @@ public class CarMovement : MonoBehaviour
 {
     Rigidbody rb;
     public float speed;
-    [SerializeField] float carLifeTime;
     public SoundEffectsPlayer soundEffectsPlayer;
     public int row;
     public GameObject StopPoliceCarTrigger;
@@ -17,7 +16,6 @@ public class CarMovement : MonoBehaviour
 
         soundEffectsPlayer.playCarDrivingSFX();
 
-        Destroy(this.gameObject, carLifeTime);
     }
 
     // Update is called once per frame
@@ -32,6 +30,14 @@ public class CarMovement : MonoBehaviour
         }
 
         if (row == 1 && transform.position.z < StopPoliceCarTrigger.transform.position.z)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "DestroyCar")
         {
             Destroy(this.gameObject);
         }

@@ -21,10 +21,8 @@ public class PowerUpSpawner : MonoBehaviour
     public bool InvisibleCloakActivated;
     public bool InstantStealActivated;
 
-    public GameObject powerUpTimerGameObject;
     public GameObject powerUpContainer;
-    public TMP_Text powerUpTimerText;
-    public float powerUpTimer;
+    public SoundEffectsPlayer soundEffectsPlayer;
 
     public GameObject powerUpButton;
     public int numOfPowerUps;
@@ -33,7 +31,6 @@ public class PowerUpSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        powerUpTimerGameObject.SetActive(false);
         StartCoroutine(SpawnPowerUps(zOffset));
     }
 
@@ -63,27 +60,7 @@ public class PowerUpSpawner : MonoBehaviour
         }
     }
 
-    public void callTimer(float time, GameObject powerUpButton)
-    {
-        float t = time;
-        StartCoroutine(PowerUpTimer(t, powerUpButton));
-    }
 
-    public IEnumerator PowerUpTimer(float time, GameObject powerUpButton)
-    {
-        powerUpTimerGameObject.SetActive(true);
-        GetComponent<SoundEffectsPlayer>().playPowerUpActivatedSFX();
-        float t = time;
-        while (t > 0)
-        {
-            powerUpTimerText.text = t.ToString();
-            yield return new WaitForSeconds(1);
-            t--;
-        }
-        Destroy(powerUpButton);
-
-        powerUpTimerGameObject.SetActive(false);
-    }
 
     public void AddPowerUp(int powerUp)
     {
@@ -93,6 +70,7 @@ public class PowerUpSpawner : MonoBehaviour
             currentPowerUpButton.GetComponent<PowerUpButton>().powerUp = powerUp;
             currentPowerUpButton.GetComponent<PowerUpButton>().powerUpSpawner = this;
             currentPowerUpButton.GetComponent<PowerUpButton>().player = player;
+            currentPowerUpButton.GetComponent<PowerUpButton>().soundEffectsPlayer = soundEffectsPlayer;
             currentPowerUpButton.GetComponent<PowerUpButton>().SetPowerUpImage();
 
             numOfPowerUps++;
