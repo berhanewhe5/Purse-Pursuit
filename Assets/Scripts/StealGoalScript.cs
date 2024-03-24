@@ -101,6 +101,7 @@ public class StealGoalScript : MonoBehaviour
         }
         GoalDescriptionText.text = GenerateGoalDescription(time);
         int moneyGoal = moneyBase + ((time-minTime+timeIntervals)/timeIntervals) * Random.Range(minMoney,maxMoney);
+
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
             moneyGoal = 100;

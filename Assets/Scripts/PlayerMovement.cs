@@ -101,6 +101,36 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
 #endif
+#if UNITY_STANDALONE_WIN
+                    if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        if (playerRow != 1)
+                        {
+                            soundEffectsPlayer.playSwipeSFX();
+                            playerVelocity += Vector3.left * horizontalSpeed;
+                            horizontalMovedApplied = false;
+                            playerRow -= 1;
+                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                            {
+                                gameManager.GetComponent<Tutorial>().TutorialPart3();
+                            }
+                        }
+                    }
+                    else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        if (playerRow != 5)
+                        {
+                            soundEffectsPlayer.playSwipeSFX();
+                            playerVelocity += Vector3.right * horizontalSpeed;
+                            horizontalMovedApplied = false;
+                            playerRow += 1;
+                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+                            {
+                                gameManager.GetComponent<Tutorial>().TutorialPart2();
+                            }
+                        }
+                    }
+#endif
 #if UNITY_IOS
                     if (Input.touchCount > 0)
                     {

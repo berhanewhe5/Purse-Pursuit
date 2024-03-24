@@ -10,6 +10,7 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     public GameObject losePanel;
     public GameObject gameUIPanel;
+    public GameObject tutorialPanel;
     public GameObject mainMenuPanel;
     public GameObject pausedPanel;
     public GameObject settingsPanel;
@@ -159,6 +160,7 @@ public class GameManagerScript : MonoBehaviour
         GetComponent<SoundEffectsPlayer>().playArrestSFX();
         losePanel.SetActive(true);
         gameUIPanel.SetActive(false);
+        tutorialPanel.SetActive(false);
         StartCoroutine("HidePolice");
         scoreText.text = "Earned Money: $" + stealScript.Money.ToString();
         highscoreText.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highcore").ToString();
