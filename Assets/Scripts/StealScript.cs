@@ -63,8 +63,13 @@ public class StealScript : MonoBehaviour
     public bool firstStealCompleted = false;
 
     bool sfxPlayed;
+
+    public GameObject newHighScoreTextInGame;
+    bool newHighscoreComplete;
+
     private void Start()
     {
+        newHighscoreComplete = false;
         moneyIncrement = 0;
         ChooseRandomGreenArea();
         gameActive = false;
@@ -80,7 +85,6 @@ public class StealScript : MonoBehaviour
         {
             canSteal = false;
         }
-        Debug.Log(canSteal);    
     }
 
     void Update()
@@ -88,7 +92,6 @@ public class StealScript : MonoBehaviour
         //Enable and Disable Steal Slider
         if (gameActive)
         {
-            Debug.Log(Physics.Raycast(new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z), this.transform.forward * rayLength, rayLength, civillianColliderMask));
             if ((Physics.CheckSphere(this.transform.position, stealColliderRadius, civillianColliderMask) == true) && (Physics.Raycast(new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z), this.transform.forward * rayLength, rayLength, civillianColliderMask) == false))
             {
                 inStealingZone = true;
@@ -261,8 +264,22 @@ public class StealScript : MonoBehaviour
         }
     }
 
+    IEnumerator newHighscoreAlert()
+    {
+        newHighScoreTextInGame.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        newHighScoreTextInGame.SetActive(false);
+        newHighscoreComplete = true;
+    }
     public void StealMoney()
     {
+        if (Money > PlayerPrefs.GetInt("Highscore"))
+        {
+            if (PlayerPrefs.GetInt("GamePlayedBefore") == 1 && !newHighscoreComplete)
+            {
+                StartCoroutine(newHighscoreAlert());
+            }
+        }
         int newMoney = UnityEngine.Random.Range(minToSteal+moneyIncrement, maxToSteal+moneyIncrement);
         increaseMoneyAlertAnimator.SetTrigger("IncreaseMoney");
         increaseMoneyAlertText.text = "+" + newMoney.ToString();
@@ -319,7 +336,6 @@ public class StealScript : MonoBehaviour
         if (stealGoalScript.goalActivated == true)
         {
             float newMoney = UnityEngine.Random.Range((minToLose / 100) * stealGoalScript.goalProgress, (maxToLose / 100) * stealGoalScript.goalProgress);
-            Debug.Log((int)Math.Round(newMoney));
             stealGoalScript.UpdateGoal(-(int)Math.Round(newMoney));
 
             increaseMoneyAlertText.text = "" + -(int)Math.Round(newMoney);

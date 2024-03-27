@@ -25,6 +25,8 @@ public class GameManagerScript : MonoBehaviour
     public TMP_Text menuMoneyText;
     public TMP_Text mostEarnedMoneyInfo;
 
+    public GameObject newHighScoreTextInLosePanel;
+
     static bool restarted;
 
     [SerializeField] float policeWaitTime;
@@ -32,15 +34,28 @@ public class GameManagerScript : MonoBehaviour
     public Slider soundEffectsSlider;
     public Slider musicSlider;
 
-    public InterstitialAd interstitialAd;
 
     public GameObject adPanel;
     public TMP_Text scoreText;
     public TMP_Text highscoreText;
     public AudioSource music;
     public AudioMixer audioMixer;
+
+    public AdsManager adsManager;
+
+    IEnumerator DisplayBannerWithDelay()
+    {
+        yield return new WaitForSecondsRealtime(.25f);
+        adsManager.GetComponent<BannerAds>().ShowBannerAd();
+    }
     void Start()
     {
+        adsManager.GetComponent<BannerAds>().HideBannerAd();
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
+        {
+            PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
+        }
+
         mainMenuPanel.SetActive(true);
         losePanel.SetActive(false);
         gameUIPanel.SetActive(false);
@@ -65,6 +80,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
+            PlayerPrefs.SetInt("gamesPlayed", 1);
             GetComponent<Tutorial>().StartTutorial();
             GetComponent<Tutorial>().TutorialPart1();
         }
@@ -99,7 +115,12 @@ public class GameManagerScript : MonoBehaviour
     }
     void Update()
     {
-        
+        if (PlayerPrefs.GetInt("gamesPlayed") % 3 == 0)
+        {
+            Debug.Log("Show Ad");
+            PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
+            adsManager.GetComponent<InterstitialAds>().ShowInterstitialAd();
+        }
     }
 
     public void PlayTutorial()
@@ -111,23 +132,15 @@ public class GameManagerScript : MonoBehaviour
     {
         GetComponent<SoundEffectsPlayer>().playMissedAStealSFX();
         stealScript.gameActive = false;
-        PlayerPrefs.GetInt("Highcore");
 
-        if (stealScript.Money > PlayerPrefs.GetInt("Highcore"))
+        if (stealScript.Money > PlayerPrefs.GetInt("Highscore"))
         {
-            PlayerPrefs.SetInt("Highcore", stealScript.Money);
+            newHighScoreTextInLosePanel.SetActive(true);
+            PlayerPrefs.SetInt("Highscore", stealScript.Money);
         }
 
-        if (PlayerPrefs.GetInt("AdNum") == 1)
-        {
-            PlayerPrefs.SetInt("AdNum", 0);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("AdNum", PlayerPrefs.GetInt("AdNum") + 1);
-        }
 
-        if (PlayerPrefs.GetInt("AdNum") <= 1 && (stealScript.Money>0))
+        if (stealScript.Money>0)
         {
             stealScript.adMoneyText.text = "$" + stealScript.Money.ToString();
             gamePaused = true;
@@ -146,10 +159,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("RemoveAds") == 0)
         {
-            if (PlayerPrefs.GetInt("AdNum") > 1)
-            {
-                interstitialAd.ShowAd();
-            }
+            adsManager.GetComponent<InterstitialAds>().ShowInterstitialAd();
         }
 
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
@@ -162,12 +172,22 @@ public class GameManagerScript : MonoBehaviour
         gameUIPanel.SetActive(false);
         tutorialPanel.SetActive(false);
         StartCoroutine("HidePolice");
-        scoreText.text = "Earned Money: $" + stealScript.Money.ToString();
-        highscoreText.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highcore").ToString();
+        scoreText.text = "Score:\n$" + stealScript.Money.ToString();
+        highscoreText.text = "HIghscore:\n$" + PlayerPrefs.GetInt("Highscore").ToString();
         //GetComponent<SoundEffectsPlayer>().sfxAudioSource.volume = 0;
     }
 
-    
+    public void NextSong()
+    {
+        
+    }
+
+    public void PreviousSong()
+    {
+
+    }
+
+
     public void BackAdButton()
     {
         Time.timeScale = 1f;
@@ -189,6 +209,7 @@ public class GameManagerScript : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         restarted = true;
 
+
     }
 
     public void PauseButton() {
@@ -199,6 +220,7 @@ public class GameManagerScript : MonoBehaviour
             player.GetComponent<PlayerMovement>().StartCoroutine("SwipeTimeout");
             stealScript.gameActive = true;
             pausedPanel.SetActive(false);
+            adsManager.GetComponent<BannerAds>().HideBannerAd();
             Time.timeScale = 1f;
             gamePaused = false;
         }
@@ -207,6 +229,8 @@ public class GameManagerScript : MonoBehaviour
             gameUIPanel.SetActive(false);
             stealScript.gameActive = false;
             pausedPanel.SetActive(true);
+            StartCoroutine(DisplayBannerWithDelay());
+
             Time.timeScale = 0f;
             gamePaused = true;
         }
@@ -242,7 +266,7 @@ public class GameManagerScript : MonoBehaviour
     public void InfoButton()
     {
         infoPanel.SetActive(true);
-        mostEarnedMoneyInfo.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highcore").ToString();
+        mostEarnedMoneyInfo.text = "Most Earned Money: $" + PlayerPrefs.GetInt("Highscore").ToString();
     }
 
     public void ExitInfoButton()

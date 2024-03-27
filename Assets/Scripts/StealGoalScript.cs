@@ -222,16 +222,25 @@ public class StealGoalScript : MonoBehaviour
         while (multiplerTime >= 0)
         {
             // fix this -- make it more slower but for now it works.
-
-            yield return new WaitForSecondsRealtime(0.05f);
-            multiplerTime -= 0.05f;
-            multiplerRewardTimer.size -= 0.05f / time;
+            if (GetComponent<GameManagerScript>().stealScript.gameActive == true)
+            {
+                yield return new WaitForSecondsRealtime(0.05f);
+                multiplerTime -= 0.05f;
+                multiplerRewardTimer.size -= 0.05f / time;
+            }
+            else { 
+                multiplerTime = -1;
+            }
         }
+        if (GetComponent<GameManagerScript>().stealScript.gameActive == true)
+        {
+            multiplerRewardTimer.size = 0;
+            stealScript.multiplier = 1;
+            MultiplerRewardUI.SetActive(false);
 
-        multiplerRewardTimer.size = 0;
-        stealScript.multiplier = 1;
-        MultiplerRewardUI.SetActive(false);
-        GenerateGoal();
+            yield return new WaitForSeconds(Random.Range(5, 10));
+            GenerateGoal();
+        }
         
     }
 

@@ -84,7 +84,6 @@ public class StoreScript : MonoBehaviour
     public void setCostumePrice(int price) {
         if (PlayerPrefs.GetInt(currentCostume+"Purchased") == 0)
         {
-            Debug.Log(currentCostume + "Purchased");
             costumePrice.text = "$" + price.ToString();
             if (costumeKey == 6)
             {
@@ -544,7 +543,6 @@ public class StoreScript : MonoBehaviour
                 PlayerPrefs.SetInt("InstantStealTier", PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier);
                 PlayerPrefs.SetInt("InvisibleCloakTier", PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier);
                 PlayerPrefs.SetInt("MultiplierTier", PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier);
-                Debug.Log("SpeedBoostTier: " + PlayerPrefs.GetInt("SpeedBoostTier"));
                 ReCheckTierValues();
                 GetComponent<SoundEffectsPlayer>().playPurchaseItemSFX();
             }

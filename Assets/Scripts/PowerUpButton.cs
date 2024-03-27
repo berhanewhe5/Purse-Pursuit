@@ -28,7 +28,7 @@ public class PowerUpButton : MonoBehaviour
     void Start()
     {
         powerUpTimerText.text = "";
-        Invoke("PowerUpButtonClicked", 0.5f);
+        StartCoroutine("PowerUpButtonClicked");
     }
 
 
@@ -48,8 +48,9 @@ public class PowerUpButton : MonoBehaviour
         }
     }
 
-    public void PowerUpButtonClicked()
+    public IEnumerator PowerUpButtonClicked()
     {
+        yield return new WaitForSecondsRealtime(0.5f);
         powerUpSpawner.PowerUpActivated = true;
 
         switch (powerUp)
