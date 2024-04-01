@@ -266,21 +266,13 @@ public class StealScript : MonoBehaviour
 
     IEnumerator newHighscoreAlert()
     {
-        PlayerPrefs.SetInt("Highscore", Money);
         newHighScoreTextInGame.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         newHighScoreTextInGame.SetActive(false);
-        newHighscoreComplete = true;
     }
     public void StealMoney()
     {
-        if (Money > PlayerPrefs.GetInt("Highscore"))
-        {
-            if (PlayerPrefs.GetInt("GamePlayedBefore") == 1 && !newHighscoreComplete)
-            {
-                StartCoroutine(newHighscoreAlert());
-            }
-        }
+
         int newMoney = UnityEngine.Random.Range(minToSteal+moneyIncrement, maxToSteal+moneyIncrement);
         increaseMoneyAlertAnimator.SetTrigger("IncreaseMoney");
         increaseMoneyAlertText.text = "+" + newMoney.ToString();
@@ -318,6 +310,22 @@ public class StealScript : MonoBehaviour
         {
             ReduceGreenAreaSize();
         }
+
+        if (Money > PlayerPrefs.GetInt("Highscore"))
+        {
+            if (PlayerPrefs.GetInt("GamePlayedBefore") == 1 && !newHighscoreComplete)
+            {
+                if (PlayerPrefs.GetInt("Highscore") != 0)
+                {
+                    StartCoroutine(newHighscoreAlert());
+                }
+
+                PlayerPrefs.SetInt("Highscore", Money);
+                newHighscoreComplete = true;
+
+
+            }
+        }
     }
 
     void ReduceGreenAreaSize()
@@ -332,6 +340,8 @@ public class StealScript : MonoBehaviour
         PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + (int)Math.Round((float)Money/2));
         soundEffectsPlayer.playMultiplierStealMoneySFX();
         gameManager.BackAdButton();
+        gameManager.moneyRewardText.SetActive(true);
+        gameManager.moneyRewardText.GetComponent<TMP_Text>().text = "+" + "Money";
     }
     public void LoseMoney()
     {

@@ -20,6 +20,7 @@ public class Tutorial : MonoBehaviour
     {
         TutorialPanel.SetActive(true);
         tutorialPart = 0;
+        GetComponent<GameManagerScript>().player.GetComponent<StealScript>().canSteal = false;
     }
     public void EndTutorial()
     {
@@ -30,6 +31,7 @@ public class Tutorial : MonoBehaviour
         if (!GetComponent <GameManagerScript> ().player.GetComponent<StealScript>().firstStealCompleted)
         {
             GetComponent<StealGoalScript>().GenerateGoal();
+            GetComponent<GameManagerScript>().player.GetComponent<StealScript>().canSteal = true;
         }
     }
 

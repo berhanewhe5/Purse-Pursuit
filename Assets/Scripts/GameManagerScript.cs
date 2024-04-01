@@ -51,6 +51,8 @@ public class GameManagerScript : MonoBehaviour
     public Button previousSongButton;
     public Button nextSongButton;
 
+    public GameObject moneyRewardText;
+    public TMPro.TMP_Text loseScreenMoney;
     IEnumerator DisplayBannerWithDelay()
     {
         yield return new WaitForSecondsRealtime(1f);
@@ -58,6 +60,16 @@ public class GameManagerScript : MonoBehaviour
     }
     void Start()
     {
+        if (PlayerPrefs.GetInt("SongNumber") == 1)
+        {
+            currentSong = 1;
+        }
+        else if (PlayerPrefs.GetInt("SongNumber") == 2)
+        {
+            currentSong = 2;
+        }
+
+        UpdateSong();
         adsManager.GetComponent<BannerAds>().HideBannerAd();
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
         {
@@ -174,6 +186,10 @@ public class GameManagerScript : MonoBehaviour
         {
             GetComponent<Tutorial>().HideTutorialParts();
         }
+
+        loseScreenMoney.text = "$" + stealScript.Money.ToString();
+        
+
         gameOver = true;
         GetComponent<SoundEffectsPlayer>().playArrestSFX();
         losePanel.SetActive(true);
@@ -239,8 +255,6 @@ public class GameManagerScript : MonoBehaviour
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         restarted = true;
-
-
     }
 
     public void PauseButton() {
