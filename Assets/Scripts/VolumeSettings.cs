@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using TMPro;
 
 public class VolumeSettings : MonoBehaviour
 {
@@ -9,14 +10,18 @@ public class VolumeSettings : MonoBehaviour
     [SerializeField] Slider musicVolumeSlider;
     [SerializeField] AudioMixer audioMixer;
 
-    // Start is called before the first frame update
+
+
     void Start()
     {
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
             PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
             PlayerPrefs.SetFloat("MusicVolume", 0.5f);
+            PlayerPrefs.SetInt("SongNumber", 1);
         }
+
+        GetComponent<GameManagerScript>().currentSong = PlayerPrefs.GetInt("SongNumber");
         if (PlayerPrefs.HasKey("SoundEffectsVolume"))
         {
             LoadSoundEffectsVolume();

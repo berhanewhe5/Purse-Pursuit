@@ -1714,9 +1714,10 @@ SkinnedMeshRenderer:
   - {fileID: 365236260609322828, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
   - {fileID: 6965403090234632405, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
   - {fileID: 8638700954323767610, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
-  - {fileID: -4162101702089067659, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
+  - {fileID: -3774546792406894607, guid: 5eba8cad288cd214cb6181ce9008b674, type: 3}
   - {fileID: 3004929298932242884, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
-  - {fileID: -6922793697723135513, guid: 228896486d197094e90d41b5bb02e7f2, type: 3}
+  - {fileID: 7498461928983958705, guid: 834da76bd7c8e0b44ade7aaa73573f65, type: 3}
+  - {fileID: -8894834209866155860, guid: 5eba8cad288cd214cb6181ce9008b674, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2236,6 +2237,8 @@ MonoBehaviour:
   shortMat: 0
   pantsMat: 1
   shoesMat: 2
+  hasGlasses: 0
+  hasSuit: 0
 --- !u!114 &7814327375006403898
 MonoBehaviour:
   m_ObjectHideFlags: 0

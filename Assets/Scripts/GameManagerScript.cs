@@ -43,9 +43,17 @@ public class GameManagerScript : MonoBehaviour
 
     public AdsManager adsManager;
 
+    [SerializeField] AudioClip PursePursuitSong1;
+    [SerializeField] AudioClip PursePursuitSong2;
+    public TMPro.TMP_Text songTitleText;
+    public int currentSong;
+
+    public Button previousSongButton;
+    public Button nextSongButton;
+
     IEnumerator DisplayBannerWithDelay()
     {
-        yield return new WaitForSecondsRealtime(.25f);
+        yield return new WaitForSecondsRealtime(1f);
         adsManager.GetComponent<BannerAds>().ShowBannerAd();
     }
     void Start()
@@ -179,14 +187,37 @@ public class GameManagerScript : MonoBehaviour
 
     public void NextSong()
     {
-        
+        currentSong++;
+        UpdateSong();
     }
 
     public void PreviousSong()
     {
-
+        currentSong--;
+        UpdateSong();
     }
 
+    public void UpdateSong()
+    {
+        if (currentSong == 1)
+        {
+            music.clip = PursePursuitSong1;
+            songTitleText.text = "Thief in the Shadows";
+            PlayerPrefs.SetInt("SongNumber", 1);
+            previousSongButton.interactable = false;
+            nextSongButton.interactable = true;
+        }
+        else if (currentSong == 2)
+        {
+            music.clip = PursePursuitSong2;
+            songTitleText.text = "Smooth Criminal";
+            PlayerPrefs.SetInt("SongNumber", 2);
+            nextSongButton.interactable = false;
+            previousSongButton.interactable = true;
+        }
+
+        music.Play();
+    }
 
     public void BackAdButton()
     {
@@ -223,6 +254,8 @@ public class GameManagerScript : MonoBehaviour
             adsManager.GetComponent<BannerAds>().HideBannerAd();
             Time.timeScale = 1f;
             gamePaused = false;
+
+            GetComponent<SoundEffectsPlayer>().ConstantPitchSFXAudioSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
         }
         else {
             GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
@@ -233,6 +266,10 @@ public class GameManagerScript : MonoBehaviour
 
             Time.timeScale = 0f;
             gamePaused = true;
+
+            GetComponent<SoundEffectsPlayer>().ConstantPitchSFXAudioSource.volume = 0;
+
+
         }
     }
 
@@ -248,6 +285,19 @@ public class GameManagerScript : MonoBehaviour
         settingsPanel.SetActive(true);
         GetComponent<VolumeSettings>().LoadMusicVolume();
         GetComponent<VolumeSettings>().LoadSoundEffectsVolume();
+
+        if (PlayerPrefs.GetInt("SongNumber") == 1)
+        {
+            songTitleText.text = "Thief in the Shadows";
+            previousSongButton.interactable = false;
+            nextSongButton.interactable = true;
+        }
+        else if (PlayerPrefs.GetInt("SongNumber") == 2)
+        {
+            songTitleText.text = "Smooth Criminal";
+            nextSongButton.interactable = false;
+            previousSongButton.interactable = true;
+        }
 
     }
 

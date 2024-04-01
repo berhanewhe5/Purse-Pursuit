@@ -277,9 +277,11 @@ public class StealGoalScript : MonoBehaviour
 
     public void ShowGoalUI()
     {
-        GetComponent<SoundEffectsPlayer>().playBillPopsUpSFX();
-
-        GoalUI.SetActive(true);
+        if (!GetComponent<GameManagerScript>().gameOver)
+        {
+            GetComponent<SoundEffectsPlayer>().playBillPopsUpSFX();
+            GoalUI.SetActive(true);
+        }
     }
     void Update()
     {

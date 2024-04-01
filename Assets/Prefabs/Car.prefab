@@ -58,6 +58,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: dd3a9db6c0273824f839a1533e3ffafb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 7993982598810627253, guid: dd3a9db6c0273824f839a1533e3ffafb,
+        type: 3}
+    - target: {fileID: -5754084199372789682, guid: dd3a9db6c0273824f839a1533e3ffafb,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 7181354489272352648, guid: 4a3a049c031c82941b9517175e1a9acb,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: dd3a9db6c0273824f839a1533e3ffafb,
         type: 3}
       propertyPath: m_Name
@@ -103,7 +115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  carLifeTime: 4
   soundEffectsPlayer: {fileID: 0}
   row: 0
   StopPoliceCarTrigger: {fileID: 0}
@@ -196,4 +207,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.9944861, y: 1.2380092, z: 4.101868}
-  m_Center: {x: -0.000010371208, y: 0.06778368, z: 0.03816104}
+  m_Center: {x: 0, y: 0, z: 0}

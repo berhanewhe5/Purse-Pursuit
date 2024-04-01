@@ -266,6 +266,7 @@ public class StealScript : MonoBehaviour
 
     IEnumerator newHighscoreAlert()
     {
+        PlayerPrefs.SetInt("Highscore", Money);
         newHighScoreTextInGame.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         newHighScoreTextInGame.SetActive(false);
@@ -330,6 +331,7 @@ public class StealScript : MonoBehaviour
         adMoneyText.text = "$" + Money.ToString();
         PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + (int)Math.Round((float)Money/2));
         soundEffectsPlayer.playMultiplierStealMoneySFX();
+        gameManager.BackAdButton();
     }
     public void LoseMoney()
     {
@@ -341,6 +343,7 @@ public class StealScript : MonoBehaviour
             increaseMoneyAlertText.text = "" + -(int)Math.Round(newMoney);
             increaseMoneyAlertText.color = Color.red;
             increaseMoneyAlertAnimator.SetTrigger("IncreaseMoney");
+
         }
         else {
             float newMoney = UnityEngine.Random.Range((minToLose / 100) * Money, (maxToLose / 100) * Money);

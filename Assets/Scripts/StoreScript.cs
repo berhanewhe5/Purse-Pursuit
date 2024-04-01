@@ -73,6 +73,13 @@ public class StoreScript : MonoBehaviour
     public Button buyCostumeButton;
     public Button buyUpgradeButton;
 
+    public GameObject speedBoostUpgradeText;
+    public GameObject instantStealUpgradeText;
+    public GameObject invisibleClokeUpgradeText;
+    public GameObject multiplierUpgradeText;
+
+    public Animator lowFundsAnimator;
+
     public void setCostumeName(string name)
     {
         costumeName.text = name;
@@ -84,6 +91,7 @@ public class StoreScript : MonoBehaviour
     public void setCostumePrice(int price) {
         if (PlayerPrefs.GetInt(currentCostume+"Purchased") == 0)
         {
+            buyCostumeButton.interactable = true;
             costumePrice.text = "$" + price.ToString();
             if (costumeKey == 6)
             {
@@ -108,9 +116,6 @@ public class StoreScript : MonoBehaviour
                     buyCostumeText.text = "Select";
                     buyCostumeButton.interactable = false;
                 }
-            }
-            else { 
-                buyCostumeButton.interactable = false;
             }
         }
         else
@@ -269,6 +274,8 @@ public class StoreScript : MonoBehaviour
         storeTitle.text = "Costumes";
         currentPrice = 0;
 
+
+        ReCheckTierValues();
     }
 
     public void BuyMoreCashButton()
@@ -309,7 +316,8 @@ public class StoreScript : MonoBehaviour
                 {
                     GetComponent<GameManagerScript>().SubscribeToKonita();
                 }
-                else { 
+                else
+                {
                     PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - currentPrice);
                 }
                 PlayerPrefs.SetInt(currentCostume + "Purchased", 1);
@@ -317,8 +325,12 @@ public class StoreScript : MonoBehaviour
                 buyCostumeText.text = "Select";
                 buyButtonState = false;
                 GetComponent<SoundEffectsPlayer>().playPurchaseItemSFX();
+                SetCostume();
+
             }
-            SetCostume();
+            else { 
+                lowFundsAnimator.SetTrigger("LowFunds");
+            }
         }
         else {
             SetCostume();
@@ -438,6 +450,46 @@ public class StoreScript : MonoBehaviour
         {
             multiplierButton.interactable = true;
         }
+
+        if (PlayerPrefs.GetInt("SpeedBoostTier") > 0)
+        {
+            speedBoostUpgradeText.SetActive(true);
+            speedBoostUpgradeText.GetComponent<TMP_Text>().text = "+ " + (PlayerPrefs.GetInt("SpeedBoostTier")*3).ToString() + " Seconds";
+        }
+        else
+        {
+            speedBoostUpgradeText.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("InstantStealTier") > 0)
+        {
+            instantStealUpgradeText.SetActive(true);
+            instantStealUpgradeText.GetComponent<TMP_Text>().text = "+ " + (PlayerPrefs.GetInt("InstantStealTier")*3).ToString() + " Seconds";
+        }
+        else{
+            instantStealUpgradeText.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("InvisibleCloakTier") > 0)
+        {
+            invisibleClokeUpgradeText.SetActive(true);
+            invisibleClokeUpgradeText.GetComponent<TMP_Text>().text = "+ " + (PlayerPrefs.GetInt("InvisibleCloakTier")*3).ToString() + " Seconds";
+        }
+        else
+        {
+            invisibleClokeUpgradeText.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("MultiplierTier") > 0)
+        {
+            multiplierUpgradeText.SetActive(true);
+            multiplierUpgradeText.GetComponent<TMP_Text>().text = "+ " + (PlayerPrefs.GetInt("MultiplierTier")*3).ToString() + " Seconds";
+        }
+        else
+        {
+            multiplierUpgradeText.SetActive(false);
+        }
+
         speedBoostCurrentTier = 0;
         invisibleCloakCurrentTier = 0;
         instantStealCurrentTier = 0;
@@ -459,10 +511,14 @@ public class StoreScript : MonoBehaviour
                 speedBoostButton.interactable = false;
             }
         }
+
+        speedBoostUpgradeText.SetActive(true);
+        speedBoostUpgradeText.GetComponent<TMP_Text>().text = "+ " + ((PlayerPrefs.GetInt("SpeedBoostTier") + speedBoostCurrentTier)*3).ToString() + " Seconds";
     }
 
     public void IncreaseInstantStealButton()
     {
+
         if ((PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier) != 5)
         {
             instantStealTiers[PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier].color = new Color32(161, 255, 161, 255);
@@ -475,10 +531,15 @@ public class StoreScript : MonoBehaviour
                 instantStealButton.interactable = false;
             }
         }
+
+        instantStealUpgradeText.SetActive(true);
+        instantStealUpgradeText.GetComponent<TMP_Text>().text = "+ " + ((PlayerPrefs.GetInt("InstantStealTier") + instantStealCurrentTier)*3).ToString() + " Seconds";
     }
 
     public void IncreaseInvisibleCloak()
     {
+
+
         if ((PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier) != 5)
         {
             invisibleCloakTiers[PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier].color = new Color32(161, 255, 161, 255);
@@ -491,10 +552,15 @@ public class StoreScript : MonoBehaviour
                 invisibleCloakButton.interactable = false;
             }
         }
+
+        invisibleClokeUpgradeText.SetActive(true);
+        invisibleClokeUpgradeText.GetComponent<TMP_Text>().text = "+ " + ((PlayerPrefs.GetInt("InvisibleCloakTier") + invisibleCloakCurrentTier)*3).ToString() + " Seconds";
     }
 
     public void IncreaseMultiplier()
     {
+
+
         if ((PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier) != 5)
         {
             multiplierTiers[PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier].color = new Color32(161, 255, 161, 255);
@@ -507,6 +573,9 @@ public class StoreScript : MonoBehaviour
                 multiplierButton.interactable = false;
             }
         }
+
+        multiplierUpgradeText.SetActive(true);
+        multiplierUpgradeText.GetComponent<TMP_Text>().text = "+ " + ((PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier)*3).ToString() + " Seconds";
     }
     public int DetermineCurrentUpgradePrice(int currentTier)
     {
@@ -545,6 +614,9 @@ public class StoreScript : MonoBehaviour
                 PlayerPrefs.SetInt("MultiplierTier", PlayerPrefs.GetInt("MultiplierTier") + multiplierCurrentTier);
                 ReCheckTierValues();
                 GetComponent<SoundEffectsPlayer>().playPurchaseItemSFX();
+            }
+            else {
+                lowFundsAnimator.SetTrigger("LowFunds");
             }
         }
     }

@@ -14,9 +14,9 @@ public class RewardedAds : MonoBehaviour, IUnityAdsShowListener, IUnityAdsLoadLi
     private void Awake()
     {
         #if UNITY_IOS
-                    adUnitId = iosGameId;
+            adUnitId = iosGameId;
         #elif UNITY_ANDROID
-                adUnitId = androidGameId;
+            adUnitId = androidGameId;
         #endif
     }
 
@@ -39,7 +39,7 @@ public class RewardedAds : MonoBehaviour, IUnityAdsShowListener, IUnityAdsLoadLi
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
-
+        throw new System.NotImplementedException();
     }
     #endregion
 

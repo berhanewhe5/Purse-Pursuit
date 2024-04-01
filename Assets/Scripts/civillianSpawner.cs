@@ -30,6 +30,9 @@ public class civillianSpawner : MonoBehaviour
     public float zPosition=0;
 
     public SoundEffectsPlayer soundEffectsPlayer;
+
+    public PlayerMovement playerMovement;
+
     void Start()
     {
         civillianCount = 0;
@@ -78,7 +81,7 @@ public class civillianSpawner : MonoBehaviour
         while (true) { 
             while (civillianCount < civillianLimit)
             {
-                yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+                yield return new WaitForSeconds(Random.Range(minWaitTime/playerMovement.speedPowerUpMultiplier, maxWaitTime/ playerMovement.speedPowerUpMultiplier));
 
                 civillianSpawnZ = player.transform.position.z + position;
                 if (!stealScript.gameActive)

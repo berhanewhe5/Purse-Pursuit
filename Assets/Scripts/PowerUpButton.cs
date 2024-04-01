@@ -90,6 +90,10 @@ public class PowerUpButton : MonoBehaviour
             yield return new WaitForSeconds(1);
             t--;
         }
+        if (powerUp == 2)
+        {
+            player.GetComponent<PlayerMovement>().speedPowerUpMultiplier = 1;
+        }
         Destroy(this.gameObject);
     }
 }

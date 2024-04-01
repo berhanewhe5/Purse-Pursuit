@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CarSpawner : MonoBehaviour
@@ -17,6 +18,8 @@ public class CarSpawner : MonoBehaviour
     [SerializeField] Transform player;
     public bool isPlayerBusted;
     public GameObject StopPoliceCarTrigger;
+
+    public float carYPosition;
     void Start()
     {
         StartCoroutine("carTimer");
@@ -48,7 +51,7 @@ public class CarSpawner : MonoBehaviour
 
             if (currentLane == 1 || currentLane == 2)
             {
-                GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], 1.037f, player.position.z - backOfPlayerOffset), transform.rotation);
+                GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], carYPosition, player.position.z - backOfPlayerOffset), transform.rotation);
                 newCar.transform.eulerAngles = new Vector3(0, 0, 0);
                 newCar.GetComponent<CarMovement>().soundEffectsPlayer = GetComponent<SoundEffectsPlayer>();
                 newCar.GetComponent<CarMovement>().row = currentLane;
@@ -60,7 +63,7 @@ public class CarSpawner : MonoBehaviour
             }
             else if (currentLane == 3 || currentLane == 4)
             {
-                GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], 1.037f, player.position.z + frontOfPlayerOffset), transform.rotation);
+                GameObject newCar = Instantiate(car, new Vector3(xCarPositions[currentLane-1], carYPosition, player.position.z + frontOfPlayerOffset), transform.rotation);
                 newCar.transform.eulerAngles = new Vector3(0, 180f, 0);
                 newCar.GetComponent<CarMovement>().soundEffectsPlayer = GetComponent<SoundEffectsPlayer>();
                 newCar.GetComponent<CarMovement>().row = currentLane;
