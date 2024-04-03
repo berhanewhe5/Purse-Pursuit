@@ -383,7 +383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $3.99
+  m_text: $4.99
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7142b23c2bb62664aa67b93ec65af997, type: 2}
   m_sharedMaterial: {fileID: 2562943070698516256, guid: 7142b23c2bb62664aa67b93ec65af997,
@@ -1112,7 +1112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &60846003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1815,7 +1815,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &149511921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7436,8 +7436,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 168.29228, y: -108.9798}
-  m_SizeDelta: {x: 405.52362, y: 255}
+  m_AnchoredPosition: {x: 173.81154, y: -105.51929}
+  m_SizeDelta: {x: 418.82303, y: 255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &495763212
 MonoBehaviour:
@@ -7789,7 +7789,7 @@ GameObject:
   - component: {fileID: 517030432}
   - component: {fileID: 517030431}
   m_Layer: 5
-  m_Name: 2.59Button
+  m_Name: 2.99Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9126,7 +9126,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $2.59
+  m_text: $2.99
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7142b23c2bb62664aa67b93ec65af997, type: 2}
   m_sharedMaterial: {fileID: 2562943070698516256, guid: 7142b23c2bb62664aa67b93ec65af997,
@@ -10632,8 +10632,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 504.87686, y: -108.9798}
-  m_SizeDelta: {x: 405.52362, y: 255}
+  m_AnchoredPosition: {x: 521.43463, y: -105.51929}
+  m_SizeDelta: {x: 418.82303, y: 255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &775718166
 MonoBehaviour:
@@ -15792,7 +15792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1192598373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16522,6 +16522,8 @@ MonoBehaviour:
   currentSong: 0
   previousSongButton: {fileID: 1382572604}
   nextSongButton: {fileID: 524072023}
+  moneyRewardText: {fileID: 1857333868}
+  loseScreenMoney: {fileID: 221636364}
 --- !u!114 &1234866182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16708,6 +16710,9 @@ MonoBehaviour:
   bumpedManSFX: {fileID: 8300000, guid: bd326d7ec1b51584597c52e23fc8266a, type: 3}
   bumpedWomanSFX: {fileID: 8300000, guid: d84fdead6d578064d9dbd1c3f3ad0353, type: 3}
   arrestSFX: {fileID: 8300000, guid: 0f6fce927a8987045b0bd68a2dea4b18, type: 3}
+  lowFunds: {fileID: 8300000, guid: a6aa6ef7f7c81f344bb9f2062b856562, type: 3}
+  newHighscoreSFX: {fileID: 8300000, guid: 5db95fdbd67c9204abe0b3821bfd088e, type: 3}
+  adRewardSFX: {fileID: 8300000, guid: f8ebbc8535d0b58439d3a220fb9b53ab, type: 3}
   stealMoneySFXVolume: 0.523
   carDrivingSFXVolume: 0.234
   swipeSFXVolume: 0.05
@@ -17817,7 +17822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1301108724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19520,8 +19525,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 841.4614, y: -108.9798}
-  m_SizeDelta: {x: 405.52362, y: 255}
+  m_AnchoredPosition: {x: 869.0577, y: -105.51929}
+  m_SizeDelta: {x: 418.82303, y: 255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1483192443
 MonoBehaviour:
@@ -24227,7 +24232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1857333869
 RectTransform:
   m_ObjectHideFlags: 0

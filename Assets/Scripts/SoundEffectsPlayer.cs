@@ -27,6 +27,10 @@ public class SoundEffectsPlayer : MonoBehaviour
     public AudioClip bumpedManSFX;
     public AudioClip bumpedWomanSFX;
     public AudioClip arrestSFX;
+    public AudioClip lowFunds;
+    public AudioClip newHighscoreSFX;
+    public AudioClip adRewardSFX;
+
     [Range(0,1)]
     public float stealMoneySFXVolume;
     [Range(0,1)]
@@ -41,7 +45,18 @@ public class SoundEffectsPlayer : MonoBehaviour
     {
         ConstantPitchSFXAudioSource.PlayOneShot(stealMoneySFX[Random.Range(0, stealMoneySFX.Length)], stealMoneySFXVolume);
     }
-
+    public void playNewHighscoreSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(newHighscoreSFX);
+    }
+    public void playAdRewardSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(adRewardSFX);
+    }
+    public void playLowFundsSFX()
+    {
+        ConstantPitchSFXAudioSource.PlayOneShot(lowFunds);
+    }
     public void playMultiplierStealMoneySFX()
     {
         ConstantPitchSFXAudioSource.PlayOneShot(multiplierStealMoneySFX, stealMoneySFXVolume);

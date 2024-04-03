@@ -330,6 +330,7 @@ public class StoreScript : MonoBehaviour
             }
             else { 
                 lowFundsAnimator.SetTrigger("LowFunds");
+                GetComponentInChildren<SoundEffectsPlayer>().playLowFundsSFX();
             }
         }
         else {
