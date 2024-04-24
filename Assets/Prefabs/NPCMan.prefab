@@ -524,7 +524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 2
   player: {fileID: 0}
-  playerOffset: -3
+  playerOffset: -5
   civillianSpawner: {fileID: 0}
 --- !u!95 &5034968242776278818
 Animator:
@@ -854,7 +854,7 @@ GameObject:
   - component: {fileID: 486521525428546337}
   - component: {fileID: 5011167548058492692}
   - component: {fileID: 3349920921028546393}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: BumpCivillianCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

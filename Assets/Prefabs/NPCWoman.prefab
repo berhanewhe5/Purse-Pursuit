@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 929501280209031771}
   - component: {fileID: 8823763321518051760}
   - component: {fileID: 2877535471444894319}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: BumpCivillianCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2253,7 +2253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 2
   player: {fileID: 0}
-  playerOffset: -3
+  playerOffset: -5
   civillianSpawner: {fileID: 0}
 --- !u!143 &6406259399365797731
 CharacterController:

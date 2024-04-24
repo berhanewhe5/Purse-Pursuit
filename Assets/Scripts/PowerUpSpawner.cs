@@ -15,8 +15,6 @@ public class PowerUpSpawner : MonoBehaviour
     public StealScript stealScript;
     public float zOffset;
 
-
-    public bool PowerUpActivated;
     public bool SpeedBoostActivated;
     public bool InvisibleCloakActivated;
     public bool InstantStealActivated;
@@ -25,8 +23,10 @@ public class PowerUpSpawner : MonoBehaviour
     public SoundEffectsPlayer soundEffectsPlayer;
 
     public GameObject powerUpButton;
-    public int numOfPowerUps;
-    public int maxPowerUps;
+
+    public PowerUpButton currentInstantStealPowerUp;
+    public PowerUpButton currentInvisibleCloakPowerUp;
+    public PowerUpButton currentSpeedBoostPowerUp;
 
     // Start is called before the first frame update
     void Start()
@@ -64,17 +64,56 @@ public class PowerUpSpawner : MonoBehaviour
 
     public void AddPowerUp(int powerUp)
     {
-        if (numOfPowerUps < maxPowerUps)
+        if (powerUp == 0)
         {
-            GameObject currentPowerUpButton = Instantiate(powerUpButton, powerUpContainer.transform);
-            currentPowerUpButton.GetComponent<PowerUpButton>().powerUp = powerUp;
-            currentPowerUpButton.GetComponent<PowerUpButton>().powerUpSpawner = this;
-            currentPowerUpButton.GetComponent<PowerUpButton>().player = player;
-            currentPowerUpButton.GetComponent<PowerUpButton>().soundEffectsPlayer = soundEffectsPlayer;
-            currentPowerUpButton.GetComponent<PowerUpButton>().SetPowerUpImage();
+            if (InstantStealActivated)
+            {
+                currentInstantStealPowerUp.ResetTimerText();  
 
-            numOfPowerUps++;
-            GetComponent<SoundEffectsPlayer>().playPowerUpCollectedSFX();
+            }
+            else {
+                GameObject currentPowerUpButton = Instantiate(powerUpButton, powerUpContainer.transform);
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUp = powerUp;
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUpSpawner = this;
+                currentPowerUpButton.GetComponent<PowerUpButton>().player = player;
+                currentPowerUpButton.GetComponent<PowerUpButton>().soundEffectsPlayer = soundEffectsPlayer;
+                currentPowerUpButton.GetComponent<PowerUpButton>().SetPowerUpImage();
+                currentInstantStealPowerUp = currentPowerUpButton.GetComponent<PowerUpButton>();
+            }
         }
+        else if (powerUp == 1)
+        {
+            if (InvisibleCloakActivated)
+            {
+                currentInvisibleCloakPowerUp.ResetTimerText();
+            }
+            else {
+                GameObject currentPowerUpButton = Instantiate(powerUpButton, powerUpContainer.transform);
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUp = powerUp;
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUpSpawner = this;
+                currentPowerUpButton.GetComponent<PowerUpButton>().player = player;
+                currentPowerUpButton.GetComponent<PowerUpButton>().soundEffectsPlayer = soundEffectsPlayer;
+                currentPowerUpButton.GetComponent<PowerUpButton>().SetPowerUpImage();
+                currentInvisibleCloakPowerUp = currentPowerUpButton.GetComponent<PowerUpButton>();
+            }
+        }
+        else if (powerUp == 2)
+        {
+            if (SpeedBoostActivated)
+            {
+                currentSpeedBoostPowerUp.ResetTimerText();
+            }
+            else {
+                GameObject currentPowerUpButton = Instantiate(powerUpButton, powerUpContainer.transform);
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUp = powerUp;
+                currentPowerUpButton.GetComponent<PowerUpButton>().powerUpSpawner = this;
+                currentPowerUpButton.GetComponent<PowerUpButton>().player = player;
+                currentPowerUpButton.GetComponent<PowerUpButton>().soundEffectsPlayer = soundEffectsPlayer;
+                currentPowerUpButton.GetComponent<PowerUpButton>().SetPowerUpImage();
+                currentSpeedBoostPowerUp = currentPowerUpButton.GetComponent<PowerUpButton>();
+            }
+        }
+
+        GetComponent<SoundEffectsPlayer>().playPowerUpCollectedSFX();
     }
 }

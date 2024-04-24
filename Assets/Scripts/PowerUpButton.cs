@@ -25,13 +25,35 @@ public class PowerUpButton : MonoBehaviour
     public TMP_Text powerUpTimerText;
     public float powerUpTimer;
     public SoundEffectsPlayer soundEffectsPlayer;
+
+    public float timeLeft;
+
     void Start()
     {
         powerUpTimerText.text = "";
         StartCoroutine("PowerUpButtonClicked");
     }
 
-
+    public void ResetTimerText()
+    {
+        StopAllCoroutines();
+        switch(powerUp)
+        {
+            case 0:
+                timeLeft = instantStealPowerUpTime + (PlayerPrefs.GetInt("InstantStealTier") * 3);
+                powerUpTimerText.text = timeLeft.ToString();
+                break;
+            case 1:
+                timeLeft = invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3);
+                powerUpTimerText.text = timeLeft.ToString();
+                break;
+            case 2:
+                timeLeft = speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3);
+                powerUpTimerText.text = timeLeft.ToString();
+                break;
+        }
+        StartCoroutine("PowerUpTimer");
+    }
     public void SetPowerUpImage()
     {
         switch (powerUp)
@@ -51,49 +73,78 @@ public class PowerUpButton : MonoBehaviour
     public IEnumerator PowerUpButtonClicked()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        powerUpSpawner.PowerUpActivated = true;
 
         switch (powerUp)
         {
             case 0:
-                powerUpSpawner.InstantStealActivated = true;
-                player.GetComponent<StealScript>().callInstantStealPowerUp(instantStealPowerUpTime + (PlayerPrefs.GetInt("InstantStealTier") * 3));
-                callTimer(instantStealPowerUpTime+(PlayerPrefs.GetInt("InstantStealTier")*3));
+                timeLeft = instantStealPowerUpTime + (PlayerPrefs.GetInt("InstantStealTier") * 3);
+                callTimer();
                 break;
             case 1:
-                powerUpSpawner.InvisibleCloakActivated = true;
-                player.GetComponent<StealScript>().callInvisibleCloakPowerUpPowerUp(invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3));
-                callTimer(invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3));
+                timeLeft = invisibleCloakTime + (PlayerPrefs.GetInt("InvisibleCloakTier") * 3);
+                callTimer();
                 break;
             case 2:
-                powerUpSpawner.SpeedBoostActivated = true;
-                player.GetComponent<PlayerMovement>().callSpeedPowerUp(speedPowerUpMultiplier, speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3));
-                callTimer(speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3));
+                timeLeft = speedPowerUpTime + (PlayerPrefs.GetInt("SpeedBoostTier") * 3);
+                callTimer();
                 break;
         }
-        powerUpSpawner.numOfPowerUps--;
+
     }
 
-    public void callTimer(float time)
+    public void callTimer()
     {
-        float t = time;
-        StartCoroutine(PowerUpTimer(t));
+        StartCoroutine("PowerUpTimer");
     }
 
-    IEnumerator PowerUpTimer(float time)
+    public IEnumerator PowerUpTimer()
     {
+        switch (powerUp)
+        {
+            case 0:
+                player.GetComponent<StealScript>().instantSteaalPowerUpActivated = true;
+                powerUpSpawner.InstantStealActivated = true;
+                break;
+            case 1:
+                player.GetComponent<StealScript>().invisibleCloakPowerUpActivated = true;
+                powerUpSpawner.InvisibleCloakActivated = true;
+                break;
+            case 2:
+                player.GetComponent<PlayerMovement>().speedPowerUpActive = true;
+                powerUpSpawner.SpeedBoostActivated = true;
+                break;
+        }
+
         soundEffectsPlayer.playPowerUpActivatedSFX();
-        float t = time;
-        while (t > 0)
+
+        while (timeLeft > 0)
         {
-            powerUpTimerText.text = t.ToString();
+            powerUpTimerText.text = timeLeft.ToString();
+
             yield return new WaitForSeconds(1);
-            t--;
+
+            timeLeft--;
         }
-        if (powerUp == 2)
+
+        switch (powerUp)
         {
-            player.GetComponent<PlayerMovement>().speedPowerUpMultiplier = 1;
+            case 0:
+                player.GetComponent<StealScript>().instantSteaalPowerUpActivated = false;
+                powerUpSpawner.InstantStealActivated = false;
+                powerUpSpawner.currentInstantStealPowerUp = null;
+                break;
+            case 1:
+                player.GetComponent<StealScript>().invisibleCloakPowerUpActivated = false;
+                powerUpSpawner.InvisibleCloakActivated = false;
+                powerUpSpawner.currentInvisibleCloakPowerUp = null;
+                break;
+            case 2:
+                player.GetComponent<PlayerMovement>().speedPowerUpActive = false;
+                powerUpSpawner.SpeedBoostActivated = false;
+                powerUpSpawner.currentSpeedBoostPowerUp = null;
+                break;
         }
+
         Destroy(this.gameObject);
     }
 }

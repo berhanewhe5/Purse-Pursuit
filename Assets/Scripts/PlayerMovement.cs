@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController playerController;
-    [SerializeField] float fowardSpeed;
+    public float fowardSpeed;
     [SerializeField] float horizontalSpeed;
     private Vector3 playerVelocity;
 
@@ -41,6 +41,9 @@ public class PlayerMovement : MonoBehaviour
 
     public bool speedPowerUpActive = false; 
     public float speedPowerUpMultiplier;
+
+    public PowerUpSpawner powerUpSpawner;
+
     void Start()
     {
         handCuffs.SetActive(false);
@@ -62,7 +65,17 @@ public class PlayerMovement : MonoBehaviour
             //Movement
 
             //Default Foward movement
-            playerVelocity = Vector3.forward * fowardSpeed;
+            playerVelocity = Vector3.forward * fowardSpeed * speedPowerUpMultiplier;
+
+
+            if(speedPowerUpActive)
+            {
+                speedPowerUpMultiplier = 2.5f;
+            }
+            else
+            {
+                speedPowerUpMultiplier = 1;
+            }
 
             if (stealScript.gameActive)
             {
@@ -251,24 +264,4 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
-
-
-    public void callSpeedPowerUp(float speedMultiplier, float powerUpTime)
-    {
-        float s = speedMultiplier;
-        float t = powerUpTime;
-
-        StartCoroutine(speedPowerUp(s, t));
-        speedPowerUpMultiplier = speedMultiplier;
-    }
-
-    public IEnumerator speedPowerUp(float speedMultiplier, float powerUpTime)
-    {
-        speedPowerUpActive = true;
-        fowardSpeed *= speedMultiplier;
-        yield return new WaitForSeconds(powerUpTime);
-        fowardSpeed /= speedMultiplier;
-        speedPowerUpActive = false;
-    }
-
 }

@@ -1351,12 +1351,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 2
-  civillianGFX:
-  - {fileID: 3413911544140571713}
-  - {fileID: 8818109239190906783}
-  - {fileID: 4637670469743542581}
   player: {fileID: 0}
-  playerOffset: -3
+  playerOffset: -5
   civillianSpawner: {fileID: 0}
 --- !u!95 &3932009257158521591
 Animator:

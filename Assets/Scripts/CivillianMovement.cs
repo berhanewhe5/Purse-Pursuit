@@ -37,6 +37,9 @@ public class CivillianMovement : MonoBehaviour
             player.GetComponent<StealScript>().LoseMoney();
             Destroy(this.gameObject);
         }
+        else if (hit.collider.tag == "PoliceCollider")
+        {
+            Destroy(this.gameObject);
+        }
     }
-
 }

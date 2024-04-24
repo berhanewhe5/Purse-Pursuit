@@ -139,7 +139,10 @@ public class SoundEffectsPlayer : MonoBehaviour
 
     public void playTutorialSFX()
     {
-        ConstantPitchSFXAudioSource.PlayOneShot(TutorialSFX);
+        if (GetComponent<GameManagerScript>().player.GetComponent<StealScript>().gameActive == true)
+        {
+            ConstantPitchSFXAudioSource.PlayOneShot(TutorialSFX);
+        }
     }
 
     public void playMissedAStealSFX()

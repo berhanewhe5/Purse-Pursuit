@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -41,7 +42,6 @@ public class GameManagerScript : MonoBehaviour
     public AudioSource music;
     public AudioMixer audioMixer;
 
-    public AdsManager adsManager;
 
     [SerializeField] AudioClip PursePursuitSong1;
     [SerializeField] AudioClip PursePursuitSong2;
@@ -53,13 +53,17 @@ public class GameManagerScript : MonoBehaviour
 
     public GameObject moneyRewardText;
     public TMPro.TMP_Text loseScreenMoney;
-    IEnumerator DisplayBannerWithDelay()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-        adsManager.GetComponent<BannerAds>().ShowBannerAd();
-    }
+
+    public GameObject replayTutorialPanel;
+
+    public BannerAd bannerAd;
+    public InterstialAd interstialAd;
+
+    public bool moneyDoubled;
+
     void Start()
     {
+        moneyDoubled = false;
         if (PlayerPrefs.GetInt("SongNumber") == 1)
         {
             currentSong = 1;
@@ -70,11 +74,8 @@ public class GameManagerScript : MonoBehaviour
         }
 
         UpdateSong();
-        adsManager.GetComponent<BannerAds>().HideBannerAd();
-        if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
-        {
-            PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
-        }
+
+
 
         mainMenuPanel.SetActive(true);
         losePanel.SetActive(false);
@@ -88,45 +89,109 @@ public class GameManagerScript : MonoBehaviour
         menuMoneyText.text = "$"+PlayerPrefs.GetInt("Money").ToString();
         Time.timeScale = 1f;
         audioMixer.SetFloat("GeneralSoundEffectsVolume", 0f);
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
+            PlayerPrefs.SetFloat("MusicVolume", 0.5f);
+        }
         GetComponent<VolumeSettings>().LoadMusicVolume();
         GetComponent<VolumeSettings>().LoadSoundEffectsVolume();
+
         if (restarted)
         {
             Play();
         }
+
+
+        GetComponent<SoundEffectsPlayer>().ConstantPitchSFXAudioSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        GetComponent<SoundEffectsPlayer>().VariablePitchSFXAudioSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+
     }
 
     public void Play()
     {
-        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        if (PlayerPrefs.GetInt("NewPlayer") == 0)
         {
-            PlayerPrefs.SetInt("gamesPlayed", 1);
-            GetComponent<Tutorial>().StartTutorial();
-            GetComponent<Tutorial>().TutorialPart1();
+            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+            {
+                PlayerPrefs.SetInt("gamesPlayed", 1);
+                GetComponent<Tutorial>().StartTutorial();
+                GetComponent<Tutorial>().TutorialPart1();
+                stealScript.gameActive = true;
+                gameUIPanel.SetActive(true);
+
+            }
+            else
+            {
+                StartCoroutine("GenerateFirstGoal");
+                stealScript.gameActive = true;
+                gameUIPanel.SetActive(true);
+
+            }
+            PlayerPrefs.SetInt("NewPlayer", 1);
         }
         else {
-            StartCoroutine("GenerateFirstGoal");
+            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+            {
+                tutorialPanel.SetActive(true);
+                replayTutorialPanel.SetActive(true);
+            }
+            else
+            {
+                StartCoroutine("GenerateFirstGoal");
+                stealScript.gameActive = true;
+                gameUIPanel.SetActive(true);
+
+            }
         }
+
 
         gameOver = false;
 
-        gameUIPanel.SetActive(true);
         mainMenuPanel.SetActive(false);
-        stealScript.gameActive = true;
+
         gamePaused = false;
         GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
         
     }
 
+    public void ReplayTutorial() {
+
+        replayTutorialPanel.SetActive(false);
+        PlayerPrefs.SetInt("gamesPlayed", 1);
+        GetComponent<Tutorial>().StartTutorial();
+        GetComponent<Tutorial>().TutorialPart1();
+        gameUIPanel.SetActive(true);
+        stealScript.gameActive = true;
+
+    }
+
+    public void DontReplayTutorial()
+    {
+        replayTutorialPanel.SetActive(false);
+        StartCoroutine("GenerateFirstGoal");
+        stealScript.gameActive = true;
+
+        tutorialPanel.SetActive(false);
+        PlayerPrefs.SetInt("GamePlayedBefore", 1);
+        gameUIPanel.SetActive(true);
+        player.GetComponent<StealScript>().canSteal = true;
+    }
     IEnumerator GenerateFirstGoal()
     {
-        yield return new WaitForSeconds(5f);
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            yield return new WaitForSeconds(3.5f);
+        }
+        else { 
+            yield return new WaitForSeconds(5f);
+        }
         GetComponent<StealGoalScript>().GenerateGoal();
+
         if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
         {
             GetComponent<Tutorial>().TutorialPart5();
         }
-
     }
     public void MainMenuButton() { 
         restarted = false;
@@ -135,11 +200,14 @@ public class GameManagerScript : MonoBehaviour
     }
     void Update()
     {
-        if (PlayerPrefs.GetInt("gamesPlayed") % 3 == 0)
+        if (PlayerPrefs.GetInt("RemoveAds") == 0)
         {
-            Debug.Log("Show Ad");
-            PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
-            adsManager.GetComponent<InterstitialAds>().ShowInterstitialAd();
+            if (PlayerPrefs.GetInt("gamesPlayed") % 3 == 0 && PlayerPrefs.GetInt("GamePlayedBefore") == 1)
+            {
+                Debug.Log("Show Ad");
+                PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
+                interstialAd.ShowInterstitialAd();
+            }
         }
     }
 
@@ -148,10 +216,17 @@ public class GameManagerScript : MonoBehaviour
         PlayerPrefs.SetInt("GamePlayedBefore", 0);
         Play();
     }
+
     public void Lose()
     {
         GetComponent<SoundEffectsPlayer>().playMissedAStealSFX();
         stealScript.gameActive = false;
+        tutorialPanel.SetActive(false);
+
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        {
+            GetComponent<Tutorial>().HideTutorialParts();
+        }
 
         if (stealScript.Money > PlayerPrefs.GetInt("Highscore"))
         {
@@ -177,27 +252,36 @@ public class GameManagerScript : MonoBehaviour
 
     public void LoseScreen()
     {
+        /*
         if (PlayerPrefs.GetInt("RemoveAds") == 0)
         {
-            adsManager.GetComponent<InterstitialAds>().ShowInterstitialAd();
+            interstialAd.ShowInterstitialAd();
         }
-
-        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
+        */
+        if (PlayerPrefs.GetInt("GamePlayedBefore") == 1)
         {
-            GetComponent<Tutorial>().HideTutorialParts();
+            PlayerPrefs.SetInt("gamesPlayed", PlayerPrefs.GetInt("gamesPlayed") + 1);
         }
 
-        loseScreenMoney.text = "$" + stealScript.Money.ToString();
+
         
 
         gameOver = true;
         GetComponent<SoundEffectsPlayer>().playArrestSFX();
         losePanel.SetActive(true);
         gameUIPanel.SetActive(false);
-        tutorialPanel.SetActive(false);
         StartCoroutine("HidePolice");
-        scoreText.text = "Score:\n$" + stealScript.Money.ToString();
-        highscoreText.text = "HIghscore:\n$" + PlayerPrefs.GetInt("Highscore").ToString();
+        if (!moneyDoubled)
+        {
+            scoreText.text = "Score:\n$" + stealScript.Money.ToString();
+            highscoreText.text = "HIghscore:\n$" + PlayerPrefs.GetInt("Highscore").ToString();
+            loseScreenMoney.text = "$" + stealScript.Money.ToString();
+        }
+        else {
+            scoreText.text = "Score:\n$" + (stealScript.Money/2).ToString();
+            highscoreText.text = "HIghscore:\n$" + PlayerPrefs.GetInt("Highscore").ToString();
+            loseScreenMoney.text = "$" + (stealScript.Money/2).ToString();
+        }
         //GetComponent<SoundEffectsPlayer>().sfxAudioSource.volume = 0;
     }
 
@@ -261,29 +345,33 @@ public class GameManagerScript : MonoBehaviour
 
         if (gamePaused)
         {
+            if (PlayerPrefs.GetInt("RemoveAds") == 0)
+            {
+                bannerAd._bannerView.Destroy();
+            }
             gameUIPanel.SetActive(true);
             player.GetComponent<PlayerMovement>().StartCoroutine("SwipeTimeout");
             stealScript.gameActive = true;
             pausedPanel.SetActive(false);
-            adsManager.GetComponent<BannerAds>().HideBannerAd();
             Time.timeScale = 1f;
             gamePaused = false;
 
-            GetComponent<SoundEffectsPlayer>().ConstantPitchSFXAudioSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+            audioMixer.SetFloat("SoundEffectsVolume", PlayerPrefs.GetFloat("SoundEffectsVolume"));
         }
         else {
+            if (PlayerPrefs.GetInt("RemoveAds") == 0)
+            {
+                bannerAd.CreateBannerView();
+            }
             GetComponent<SoundEffectsPlayer>().playPressButtonSFX();
             gameUIPanel.SetActive(false);
             stealScript.gameActive = false;
             pausedPanel.SetActive(true);
-            StartCoroutine(DisplayBannerWithDelay());
 
             Time.timeScale = 0f;
             gamePaused = true;
 
-            GetComponent<SoundEffectsPlayer>().ConstantPitchSFXAudioSource.volume = 0;
-
-
+            audioMixer.SetFloat("SoundEffectsVolume", -80f);
         }
     }
 

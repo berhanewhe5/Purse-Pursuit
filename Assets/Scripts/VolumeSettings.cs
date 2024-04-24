@@ -8,7 +8,7 @@ public class VolumeSettings : MonoBehaviour
 
     [SerializeField] Slider soundEffectsVolumeSlider;
     [SerializeField] Slider musicVolumeSlider;
-    [SerializeField] AudioMixer audioMixer;
+    public AudioMixer audioMixer;
 
 
 
@@ -19,6 +19,8 @@ public class VolumeSettings : MonoBehaviour
             PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
             PlayerPrefs.SetFloat("MusicVolume", 0.5f);
             PlayerPrefs.SetInt("SongNumber", 1);
+            LoadSoundEffectsVolume();
+            LoadMusicVolume();
         }
 
         GetComponent<GameManagerScript>().currentSong = PlayerPrefs.GetInt("SongNumber");
@@ -46,6 +48,7 @@ public class VolumeSettings : MonoBehaviour
         audioMixer.SetFloat("SoundEffectsVolume", Mathf.Log10(volume) *20);
         PlayerPrefs.SetFloat("SoundEffectsVolume", volume);
     }
+
 
     public void SetMusicVolume()
     {

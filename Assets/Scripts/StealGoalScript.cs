@@ -127,7 +127,6 @@ public class StealGoalScript : MonoBehaviour
 
     string GenerateGoalDescription(int time)
     {
-
         string goalDescription = "";
 
         if (time >= 30 && time < 60)
@@ -277,12 +276,13 @@ public class StealGoalScript : MonoBehaviour
 
     public void ShowGoalUI()
     {
-        if (!GetComponent<GameManagerScript>().gameOver)
+        if (GetComponent<GameManagerScript>().player.GetComponent<StealScript>().gameActive != false)
         {
             GetComponent<SoundEffectsPlayer>().playBillPopsUpSFX();
             GoalUI.SetActive(true);
         }
     }
+
     void Update()
     {
         

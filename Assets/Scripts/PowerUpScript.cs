@@ -9,6 +9,7 @@ public class PowerUpScript : MonoBehaviour
     public GameObject InvisibleCloakPowerUp;
     public GameObject SpeedBoostPowerUp;
     public GameObject player;
+
     [SerializeField] private float playerOffset;
     int powerUp;
     public PowerUpSpawner powerUpSpawner;
@@ -21,7 +22,6 @@ public class PowerUpScript : MonoBehaviour
         powerUp = Random.Range(0, 3);
         particleSystem = GetComponentInChildren<ParticleSystem>();
         var main = particleSystem.main;
-
 
         switch (powerUp)
         {
@@ -38,8 +38,6 @@ public class PowerUpScript : MonoBehaviour
                 main.startColor = powerUpPariclesColors[2];
                 break;
         }
-
-
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -50,6 +48,7 @@ public class PowerUpScript : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
     // Update is called once per frame
     void Update()
     {

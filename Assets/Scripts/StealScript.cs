@@ -9,7 +9,7 @@ public class StealScript : MonoBehaviour
 {
     [SerializeField] float stealColliderRadius;
     [SerializeField] float rayLength;
-    [SerializeField] GameObject stealSlider;
+    public GameObject stealSlider;
     [SerializeField] GameObject stealSliderComponent;
     [SerializeField] LayerMask civillianColliderMask;
 
@@ -66,6 +66,9 @@ public class StealScript : MonoBehaviour
 
     public GameObject newHighScoreTextInGame;
     bool newHighscoreComplete;
+
+
+    public PowerUpSpawner powerUpSpawner;
 
     private void Start()
     {
@@ -215,6 +218,7 @@ public class StealScript : MonoBehaviour
         float rangeDeduction = ((maximumPossibleGreenAreaSize-greenAreaSize) / maximumPossibleGreenAreaSize)/2;
         topHandlePos = (1f - rangeDeduction) + (yPos/maxGreenAreaHeight) * rangeDeduction;
         bottomHandlePos = (rangeDeduction) + (yPos / maxGreenAreaHeight) * rangeDeduction;
+
     }
     public void Steal()
     {
@@ -257,7 +261,7 @@ public class StealScript : MonoBehaviour
     public void BumpCivillian()
     {
         Collider[] civillian = Physics.OverlapSphere(this.transform.position, stealColliderRadius, civillianColliderMask);
-        Destroy(civillian[0]);
+        Destroy(civillian[0]); //error detected here (Exception unhandled Index was outside the bounds of the array)
         if (!invisibleCloakPowerUpActivated)
         {
             LoseMoney();
@@ -342,7 +346,8 @@ public class StealScript : MonoBehaviour
         soundEffectsPlayer.playMultiplierStealMoneySFX();
         gameManager.BackAdButton();
         gameManager.moneyRewardText.SetActive(true);
-        gameManager.moneyRewardText.GetComponent<TMP_Text>().text = "+" + "Money";
+        gameManager.moneyRewardText.GetComponent<TMP_Text>().text = "+$" + Money/2;
+        gameManager.moneyDoubled = true;
     }
     public void LoseMoney()
     {
@@ -367,31 +372,4 @@ public class StealScript : MonoBehaviour
         }
     }
 
-    public void callInstantStealPowerUp(float powerUpTime)
-    {
-        float t = powerUpTime;
-        StartCoroutine(instantStealPowerUp(t));
-    }
-
-
-    public IEnumerator instantStealPowerUp(float powerUpTime)
-    {
-        instantSteaalPowerUpActivated = true;
-        yield return new WaitForSeconds(powerUpTime);
-        instantSteaalPowerUpActivated = false;
-    }
-
-    public void callInvisibleCloakPowerUpPowerUp(float powerUpTime)
-    {
-        float t = powerUpTime;
-        StartCoroutine(invisibleCloakPowerUp(t));
-    }
-
-
-    public IEnumerator invisibleCloakPowerUp(float powerUpTime)
-    {
-        invisibleCloakPowerUpActivated = true;
-        yield return new WaitForSeconds(powerUpTime);
-        invisibleCloakPowerUpActivated = false;
-    }
 }

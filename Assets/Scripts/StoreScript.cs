@@ -72,6 +72,7 @@ public class StoreScript : MonoBehaviour
 
     public Button buyCostumeButton;
     public Button buyUpgradeButton;
+    public Button removeAdsButton;
 
     public GameObject speedBoostUpgradeText;
     public GameObject instantStealUpgradeText;
@@ -147,6 +148,8 @@ public class StoreScript : MonoBehaviour
     public void PurchaseCash(int amount)
     {
         PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + amount);
+        GetComponent<SoundEffectsPlayer>().playMultiplierStealMoneySFX();
+
     }
 
     public void RemoveAds()
@@ -160,30 +163,37 @@ public class StoreScript : MonoBehaviour
         if (PlayerPrefs.GetInt("GuySelected") == 1)
         {
             costumeKey = 1;
+            currentCostume = "Guy";
         }
         else if (PlayerPrefs.GetInt("FirefighterSelected") == 1)
         {
             costumeKey = 2;
+            currentCostume = "Firefighter";
         }
         else if (PlayerPrefs.GetInt("PrincessSelected") == 1)
         {
             costumeKey = 3;
+            currentCostume = "Princess";
         }
         else if (PlayerPrefs.GetInt("NerdSelected") == 1)
         {
             costumeKey = 4;
+            currentCostume = "Nerd";
         }
         else if (PlayerPrefs.GetInt("CriminalSelected") == 1)
         {
             costumeKey = 5;
+            currentCostume = "Criminal";
         }
         else if (PlayerPrefs.GetInt("KonitaSelected") == 1)
         {
             costumeKey = 6;
+            currentCostume = "Konita";
         }
         else
         {
             costumeKey = 1;
+            currentCostume = "Guy";
         }
 
         SetCostume();
@@ -284,6 +294,10 @@ public class StoreScript : MonoBehaviour
         buyMoreCashPanel.SetActive(true);
         storeTitle.text = "Buy More Cash";
         currentPrice = 0;
+        if (PlayerPrefs.GetInt("RemoveAds") == 1)
+        {
+            removeAdsButton.interactable = false;
+        }
     }
 
     public void UpgradesButton()
@@ -354,6 +368,7 @@ public class StoreScript : MonoBehaviour
         }
 
         resetSelectedCostume();
+        Debug.Log("Current Costume: " + currentCostume);
         PlayerPrefs.SetInt(currentCostume + "Selected", 1);
 
         if (PlayerPrefs.GetInt(currentCostume + "Selected") == 1)
@@ -618,6 +633,7 @@ public class StoreScript : MonoBehaviour
             }
             else {
                 lowFundsAnimator.SetTrigger("LowFunds");
+                GetComponentInChildren<SoundEffectsPlayer>().playLowFundsSFX();
             }
         }
     }
