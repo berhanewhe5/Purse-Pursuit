@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Security;
+using UnityEngine.UI;
 
 public class IAPManager : IStoreListener
 {
@@ -8,30 +9,18 @@ public class IAPManager : IStoreListener
     private IStoreController controller;
     private IExtensionProvider extensions;
 
+    public GameObject storeaUnavailablePanel;
     public IAPManager()
     {
+        storeaUnavailablePanel = GameObject.Find("StoreUnavailablePanel");
+#if UNITY_ANDROID
+        var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance(AppStore.GooglePlay));
+#elif UNITY_IOS
+        var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance(AppStore.AppleAppStore));
+#else
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+#endif
 
-        builder.AddProduct("ten_thousand_dollars", ProductType.Consumable, new IDs
-        {
-            {"100_gold_coins_googleplay", GooglePlay.Name},
-            {"100_gold_coins_appstore", AppleAppStore.Name}
-        });
-        builder.AddProduct("fifty_thousand_dollars", ProductType.Consumable, new IDs
-        {
-            {"100_gold_coins_googleplay", GooglePlay.Name},
-            {"100_gold_coins_appstore", AppleAppStore.Name}
-        });
-        builder.AddProduct("one_hundred_thousand_dollars", ProductType.Consumable, new IDs
-        {
-            {"100_gold_coins_googleplay", GooglePlay.Name},
-            {"100_gold_coins_appstore", AppleAppStore.Name}
-        });
-        builder.AddProduct("remove_ads", ProductType.NonConsumable, new IDs
-        {
-            {"100_gold_coins_googleplay", GooglePlay.Name},
-            {"100_gold_coins_appstore", AppleAppStore.Name}
-        });
         UnityPurchasing.Initialize(this, builder);
     }
 
@@ -43,6 +32,7 @@ public class IAPManager : IStoreListener
         this.controller = controller;
         this.extensions = extensions;
 
+        storeaUnavailablePanel.SetActive(false);
 
     }
 
@@ -53,8 +43,8 @@ public class IAPManager : IStoreListener
     /// will attempt initialization until it becomes available.
     /// </summary>
     public void OnInitializeFailed(InitializationFailureReason error)
-    {
-
+    { 
+        storeaUnavailablePanel.SetActive(true);
     }
 
     /// <summary>

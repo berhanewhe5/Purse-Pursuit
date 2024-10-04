@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using GoogleMobileAds.Api;
+using GoogleMobileAds;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -58,11 +60,17 @@ public class GameManagerScript : MonoBehaviour
 
     public BannerAd bannerAd;
     public InterstialAd interstialAd;
-
+    public Rewarded rewarded;
     public bool moneyDoubled;
 
+    private void Awake()
+    {
+        MobileAds.Initialize(initStatus => { });
+
+    }
     void Start()
     {
+        audioMixer.SetFloat("GeneralSoundEffectsVolume", 5f);
         moneyDoubled = false;
         if (PlayerPrefs.GetInt("SongNumber") == 1)
         {
@@ -88,12 +96,7 @@ public class GameManagerScript : MonoBehaviour
         gameOver = false;
         menuMoneyText.text = "$"+PlayerPrefs.GetInt("Money").ToString();
         Time.timeScale = 1f;
-        audioMixer.SetFloat("GeneralSoundEffectsVolume", 0f);
-        if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
-        {
-            PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
-            PlayerPrefs.SetFloat("MusicVolume", 0.5f);
-        }
+
         GetComponent<VolumeSettings>().LoadMusicVolume();
         GetComponent<VolumeSettings>().LoadSoundEffectsVolume();
 
@@ -235,7 +238,7 @@ public class GameManagerScript : MonoBehaviour
         }
 
 
-        if (stealScript.Money>0)
+        if (stealScript.Money>0 && rewarded.shouldShowAdButton())
         {
             stealScript.adMoneyText.text = "$" + stealScript.Money.ToString();
             gamePaused = true;

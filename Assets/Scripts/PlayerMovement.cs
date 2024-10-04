@@ -113,38 +113,7 @@ public class PlayerMovement : MonoBehaviour
                             }
                         }
                     }
-#endif
-#if UNITY_STANDALONE_WIN
-                    if (Input.GetKeyDown(KeyCode.LeftArrow))
-                    {
-                        if (playerRow != 1)
-                        {
-                            soundEffectsPlayer.playSwipeSFX();
-                            playerVelocity += Vector3.left * horizontalSpeed;
-                            horizontalMovedApplied = false;
-                            playerRow -= 1;
-                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
-                            {
-                                gameManager.GetComponent<Tutorial>().TutorialPart3();
-                            }
-                        }
-                    }
-                    else if (Input.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        if (playerRow != 5)
-                        {
-                            soundEffectsPlayer.playSwipeSFX();
-                            playerVelocity += Vector3.right * horizontalSpeed;
-                            horizontalMovedApplied = false;
-                            playerRow += 1;
-                            if (PlayerPrefs.GetInt("GamePlayedBefore") == 0)
-                            {
-                                gameManager.GetComponent<Tutorial>().TutorialPart2();
-                            }
-                        }
-                    }
-#endif
-#if UNITY_IOS
+#elif UNITY_IOS
                     if (Input.touchCount > 0)
                     {
                         Touch touch = Input.GetTouch(0);
@@ -168,7 +137,8 @@ public class PlayerMovement : MonoBehaviour
                                         gameManager.GetComponent<Tutorial>().TutorialPart2();
                                     }
                                 }
-                                else if (startTouchPosition.x > endTouchPosition.x)
+                            }
+                            else if (startTouchPosition.x > endTouchPosition.x)
                                 {
                                     if (playerRow != 1)
                                     {
@@ -182,12 +152,9 @@ public class PlayerMovement : MonoBehaviour
                                         }
                                     }
                                 }
-                            }
                         }
                     }
-#endif
-
-#if UNITY_ANDROID
+#elif UNITY_ANDROID
                     if (Input.touchCount > 0)
                     {
                         Touch touch = Input.GetTouch(0);

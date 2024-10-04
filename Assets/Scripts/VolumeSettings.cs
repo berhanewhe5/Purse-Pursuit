@@ -23,7 +23,7 @@ public class VolumeSettings : MonoBehaviour
             LoadMusicVolume();
         }
 
-        GetComponent<GameManagerScript>().currentSong = PlayerPrefs.GetInt("SongNumber");
+
         if (PlayerPrefs.HasKey("SoundEffectsVolume"))
         {
             LoadSoundEffectsVolume();

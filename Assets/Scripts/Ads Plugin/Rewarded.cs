@@ -75,6 +75,17 @@ public class Rewarded : MonoBehaviour
             });
     }
 
+    public bool shouldShowAdButton()
+    {
+        if (_rewardedAd == null || !_rewardedAd.CanShowAd())
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     public void ShowRewardedAd()
     {
         const string rewardMsg =
