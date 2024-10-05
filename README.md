@@ -2,9 +2,9 @@
 
 Purse Pursuit is a fast-paced mobile video game where players take on the role of a thief, skillfully pickpocketing strangers on the street. The game challenges players to navigate obstacles, time their actions precisely, and earn rewards. Developed for iOS and Android, the game offers an engaging and fun experience with intuitive controls and a dynamic progression system.
 
-<img src="https://github.com/user-attachments/assets/c8553db3-f6ec-4917-bb08-52fc9634b397" alt="screenshot-6.5-Inch-Screenshot0" width="300">
-<img src="https://github.com/user-attachments/assets/f1c6ea52-8e67-405e-856a-7589eec69b1e" alt="screenshot-6.5-Inch-Screenshot29" width="300">
-<img src="https://github.com/user-attachments/assets/a2c8e992-9c8d-44fe-9c03-f265c503a13c" alt="screenshot-6.5-Inch-Screenshot43" width="300">
+<img src="https://github.com/user-attachments/assets/c8553db3-f6ec-4917-bb08-52fc9634b397" alt="screenshot-6.5-Inch-Screenshot0" width="100">
+<img src="https://github.com/user-attachments/assets/f1c6ea52-8e67-405e-856a-7589eec69b1e" alt="screenshot-6.5-Inch-Screenshot29" width="100">
+<img src="https://github.com/user-attachments/assets/a2c8e992-9c8d-44fe-9c03-f265c503a13c" alt="screenshot-6.5-Inch-Screenshot43" width="100">
 
 # Development Process
 
@@ -34,5 +34,9 @@ The game took 8 months to develop.
 # Live demonstration
 
 https://github.com/user-attachments/assets/0172b83b-f48a-4ca0-9516-61852b92c834
+
+# Link to play game
+
+https://onelink.to/wfbxrq
 
 *All code contributions are fully from Berhane Wheeler*
