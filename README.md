@@ -23,7 +23,8 @@ This is a mobile video game where the player plays as a thief, pickpocketing fro
 
 ### Waiting Room
 
-![Waiting Room](Purse Pursuit Demonstration.mp4)
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg)](https://www.youtube.com/watch?v=DvadpVMqaFo "Everything Is AWESOME")
 
 Purse Pursuit Demonstration.mp4
 https://www.youtube.com/watch?v=DvadpVMqaFo
