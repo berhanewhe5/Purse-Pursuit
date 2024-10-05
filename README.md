@@ -35,8 +35,9 @@ The game took 8 months to develop.
 
 https://github.com/user-attachments/assets/0172b83b-f48a-4ca0-9516-61852b92c834
 
-# Link to Play Purse Pursuit
+# Link to play Purse Pursuit
 
 https://onelink.to/wfbxrq
+
 
 *All code contributions are fully from Berhane Wheeler*
